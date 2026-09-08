@@ -2,16 +2,15 @@
 
 ## Repository Status
 
-P003 established the Identity & Organization database foundation. ERP business modules, authentication flows, customer-management UI, and Accline Services administration UI remain out of scope.
+P003 is **COMPLETE**. The durable handover is [`ERP_BUILDER_MASTER_CONTEXT.md`](../ERP_BUILDER_MASTER_CONTEXT.md). P004 and later implementation stages have not started.
 
 ## Current Application Foundation
 
-- FastAPI backend with environment-based settings, `GET /health`, and a separate `GET /health/database` connectivity check.
-- React, TypeScript, Vite, and Tailwind CSS frontend with the initial ERP Builder landing screen.
-- Docker Compose development services for frontend, backend, and PostgreSQL 16.
-- SQLAlchemy 2.x models, reusable timestamp fields, project-local database sessions, and Alembic migrations.
-- Initial identity, organization, RBAC, authentication-method, and user-company-access tables.
-- A company-context primitive for future authenticated endpoints to validate active user access to a requested company.
+- **IMPLEMENTED:** FastAPI backend with environment-based settings, `GET /health`, and `GET /health/database`.
+- **IMPLEMENTED:** React, TypeScript, Vite, and Tailwind CSS responsive foundation page with backend-status feedback. It is not a full application shell or navigation system.
+- **IMPLEMENTED:** Docker Compose development services for frontend, backend, and PostgreSQL 16; SQLAlchemy 2.x; Alembic; and the P003 identity, organization, RBAC, and company-access tables.
+- **DEFERRED:** ERP business modules, authentication flows, customer-management UI, Accline Services administration UI, billing, and subscriptions.
+- **PLANNED:** mobile-browser support, language and theme preferences, branding and document-layout customization, WhatsApp/SMS, GST/e-way bill, QR/barcode, and AI-assistant capabilities. Their detailed designs remain open.
 
 ## Validation Status
 
@@ -22,5 +21,5 @@ P003 established the Identity & Organization database foundation. ERP business m
 ## Risks and Blockers
 
 - No authentication or authorization middleware exists yet; the company-context helper is not a substitute for it.
-- Role scope enforcement and ownership assignment policy must be implemented in the future authorization/service layer.
+- **OPEN:** role-scope enforcement policy, detailed role/permission catalogue, initial Owner assignment workflow, and platform-administration workflows.
 - Platform administration is represented in the backend model but has no API or UI yet.

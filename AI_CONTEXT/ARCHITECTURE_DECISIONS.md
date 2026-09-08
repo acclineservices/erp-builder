@@ -48,6 +48,14 @@
 
 **Consequences:** Login, OTP delivery, verification, credential hashing, and recovery remain future work. Plaintext passwords and OTPs are prohibited.
 
+## AD-007 - Product name is not a durable architectural identifier
+
+**Context:** ERP Builder is the current product/application name, but the name may change as the product evolves.
+
+**Decision:** Treat the current name as product and presentation context, not as a tenant boundary, durable integration identifier, or irreversible architectural assumption.
+
+**Consequences:** Future branding and naming changes remain possible without redefining company isolation or platform architecture. The detailed branding/customization model is open.
+
 ## Provisional Decisions
 
-The initial Owner assignment workflow, detailed role/permission catalogue, subscription association, warehouse-to-branch relationship, and administrative policy are intentionally provisional and must be reviewed after first-version testing.
+The initial Owner assignment workflow, detailed role/permission catalogue, subscription association, warehouse-to-branch relationship, administrative policy, application shell/navigation, theme/language preferences, document-layout customization, and future integration/provider choices are intentionally provisional and must be reviewed after first-version testing.

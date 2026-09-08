@@ -26,3 +26,9 @@
 - Keep secrets in environment configuration; do not commit `.env` files or production credentials.
 - Apply schema changes exclusively through reviewed Alembic migrations.
 - Use separate development, test, and production databases. Automated tests must never target production data.
+- Product naming, branding, or frontend navigation must not be treated as an authorization or tenant-isolation mechanism.
+
+## Deferred integrations
+
+- WhatsApp/SMS, GST/e-way bill, QR/barcode, document-layout, and AI-assistant capabilities are not implemented. Future designs must preserve company isolation and keep credentials, sensitive data, and provider access on the server side.
+- Provider selection, jurisdiction/compliance scope, AI data access, and retention rules are OPEN; do not assume them in implementation.

@@ -4,6 +4,8 @@
 
 ERP Builder is the engineering foundation for a long-term, commercial SaaS ERP platform. It provides a minimal web application plus a modular Identity & Organization database foundation so the product can grow through deliberate, secure decisions.
 
+ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable project handover, completed P003 scope, deferred work, and open decisions.
+
 ## Repository Structure
 
 ```text

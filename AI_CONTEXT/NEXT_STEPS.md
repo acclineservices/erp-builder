@@ -2,10 +2,15 @@
 
 ## Immediate Next Steps
 
-1. Define account-provisioning workflows for Accline Services, including how it assigns the initial company Owner.
-2. Implement secure authentication flows for email/password and mobile OTP using the existing `authentication_methods` structure; use a strong password hash and never persist OTP values.
-3. Implement authenticated request handling that resolves a user and requires an active company context for customer business APIs.
-4. Define platform-vs-company authorization policy, role seeding, permission naming, and the Accline Services administration boundary before building its UI.
+No successor P-stage is authorized. P003 is **COMPLETE**; P004 and later work remain unstarted.
+
+When a future task is authorized, resolve or sequence these **OPEN** decisions first:
+
+1. Account-provisioning workflow for Accline Services, including primary company Owner assignment.
+2. Detailed platform-vs-company authorization policy, role/permission catalogue, role seeding, and administration boundary.
+3. Authentication-flow design for email/password and mobile OTP, including password hashing, OTP lifecycle, and recovery.
+4. Application shell/navigation, language preferences, light/dark/system theme behavior, branding scope, and document/invoice layout customization.
+5. Sequencing and provider/compliance choices for WhatsApp/SMS, GST/e-way bill, QR/barcode, and AI-assistant capabilities.
 
 ## Dependencies
 
@@ -15,6 +20,6 @@
 
 ## Validation Needed
 
-- P003 live Docker, Alembic, backend, test-suite, and frontend-build validation completed on 2026-09-08.
+- **COMPLETE:** P003 live Docker, Alembic, backend, test-suite, and frontend-build validation completed on 2026-09-08.
 - Add PostgreSQL integration tests in CI before introducing transactional business workflows.
 - Revisit role scope and company-owner policy after first-version testing; these decisions are provisional.

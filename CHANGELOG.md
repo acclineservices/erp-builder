@@ -1,17 +1,21 @@
-# Purpose
+# Changelog
 
-Record notable repository changes in a concise chronological format.
+Notable approved repository changes are recorded here. This is not a task backlog.
 
-# Scope
+## Unreleased
 
-Covers approved changes that materially affect repository structure, engineering practices, or delivered capabilities.
+- Documentation checkpoint pending review; no implementation work is included.
 
-# Structure
+## 2026-09-08 - P003: Complete database foundation
 
-- Unreleased changes
-- Release entries
-- Change categories
+### Added
 
-# Notes
+- PostgreSQL 16 Docker development environment, SQLAlchemy 2.x, Alembic, and migration `58d8a59c599f`.
+- Identity, authentication-method, company, user-company-access, branch, warehouse, and RBAC database foundations.
+- Database health endpoint, P003 automated tests, and developer documentation.
 
-Begin recording entries when a change is ready to be communicated; avoid using this file as a task backlog.
+### Validated
+
+- Live PostgreSQL migration and table verification.
+- Backend health and database-connectivity endpoints, complete backend test suite, and frontend production build.
+- Published checkpoint: `7bbbd3eb2f57f2105879c1a6c185b6b7f940a354` on `origin/main`.
