@@ -2,27 +2,27 @@
 
 ## Task Identifier
 
-P005 - Application Shell & Navigation
+P006 - Company, Branch & Warehouse Management
 
 ## Status
 
-**COMPLETE** - completed and validated on 2026-09-09. The responsive protected shell, navigation placeholders, dashboard foundation, authorized company switcher, preference foundations, frontend build, live health/authentication checks, and 18 backend regression tests passed.
+**COMPLETE** - completed and validated on 2026-09-09. Tenant-scoped company setup, optional branch and warehouse management, same-company warehouse branch validation, lifecycle controls, frontend setup screens, live health/authentication/context checks, frontend production build, and 21 backend tests passed.
 
-No successor implementation task is active. P006 is not started.
+No successor implementation task is active. P007 is not started.
 
 ## Scope
 
-Build the first usable authenticated ERP application shell: routing, desktop/mobile navigation, dashboard foundation, user/company context, preferences, and reviewable visual structure without introducing business-module functionality.
+Build the first authenticated ERP administration functionality: company setup, optional branches, optional warehouses, tenant-safe organization APIs, and setup screens without introducing P007 role management or business modules.
 
 ## Constraints
 
-- Preserve P004 authentication, sessions, platform boundary, and UserCompanyAccess enforcement.
-- Do not implement sales, purchases, inventory, accounting, reporting, setup, user-management, or other business workflows behind navigation placeholders.
-- Do not implement P006 or paid/production integrations.
+- Preserve P003 organization identity, P004 authentication/session/platform boundary, and P005 shell.
+- Enforce active UserCompanyAccess on every organization API; do not rely on browser filtering or enable cross-company branch association.
+- Do not implement P007 RBAC management, billing, document storage, or business modules.
 
 ## Definition of Done
 
-- Authenticated routes are protected and logout returns users to authentication.
-- Desktop sidebar, mobile drawer, header, breadcrumbs, company switcher, profile menu, search, quick-action, notification, help, theme, and language foundations are responsive and reusable.
-- Dashboard content visibly distinguishes foundations from live business data.
-- Documentation records the delivered shell and validation result while P006 remains not started.
+- Company profile data, setup progress, optional GST/contact/address fields, and status display are available in the selected authorized context.
+- Branches and warehouses support creation, editing, viewing, activation/deactivation, empty states, and no fake default operating locations.
+- Warehouse branch links are validated to the same company, and tenant-isolation/lifecycle/zero-location tests pass.
+- Documentation records P006 completion while P007 remains not started.

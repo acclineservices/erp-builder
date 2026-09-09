@@ -28,9 +28,9 @@
 
 **Context:** SMEs may begin without branches or warehouses and add them later.
 
-**Decision:** `Branch` and `Warehouse` each belong to a company, but no company is required to have either.
+**Decision:** `Branch` and `Warehouse` each belong to a company, but no company is required to have either. A warehouse may optionally reference a branch owned by that same company.
 
-**Consequences:** Future modules must not assume a branch or warehouse exists. Warehouse is not tied to a branch at this stage.
+**Consequences:** Future modules must not assume a branch or warehouse exists. The P006 service validates the optional warehouse branch association before persistence, preventing cross-company links.
 
 ## AD-005 — Roles can be platform-scoped or company-scoped
 
@@ -71,6 +71,14 @@
 **Decision:** Use a small React browser-history route layer and reusable shell components rather than adding a routing or UI-framework dependency. Gate frontend app routes through the existing P004 session endpoint and load company choices only through the existing authorized-company endpoint. Keep branding, navigation configuration, theme tokens, and local theme/language/last-company preferences centralized in frontend configuration.
 
 **Consequences:** The shell remains easy to revise after first-version review and does not weaken backend authorization. Local preferences are browser conveniences, not durable server-side profile/default-company settings. Business modules, translations, dashboard customization, and accessibility review remain future work.
+
+## AD-010 - Tenant-scoped organization services behind authenticated company context
+
+**Context:** P006 introduces the first mutable customer administration APIs. Browser company selection alone cannot authorize company, branch, or warehouse operations.
+
+**Decision:** Require an authenticated P004 session and an active `UserCompanyAccess` grant for the request `X-Company-ID` before `/organization` operations. Scope every branch and warehouse lookup by that authorized company. Allow only an optional warehouse branch that belongs to the same company. Keep company status/subscription control with Accline Services and provide profile/status display only to ordinary company-context APIs.
+
+**Consequences:** Object-ID manipulation cannot reveal or change another selected tenant's organization records. P007 can add role-policy checks in the organization service layer without replacing the tenant boundary. Company branding is represented only by an optional logo URL foundation; storage and upload architecture remain deferred.
 
 ## Provisional Decisions
 

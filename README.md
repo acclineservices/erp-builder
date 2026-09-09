@@ -4,7 +4,7 @@
 
 ERP Builder is the engineering foundation for a long-term, commercial SaaS ERP platform. It provides a minimal web application plus a modular Identity & Organization database foundation so the product can grow through deliberate, secure decisions.
 
-ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable project handover, completed P005 scope, deferred work, and open decisions.
+ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable project handover, completed P006 scope, deferred work, and open decisions.
 
 ## Repository Structure
 
@@ -110,9 +110,11 @@ P003 uses PostgreSQL, SQLAlchemy 2.x, and Alembic. Users are independent of comp
 
 P004 adds email/password and mobile-OTP authentication, activation and email/mobile verification, email and mobile password recovery, revocable server-side sessions, Remember Me, temporary failed-login protection, and separate platform-admin authentication. Passwords, OTPs, and opaque token/session values are persisted only as hashes. The development notification abstraction intentionally does not send production email, SMS, or WhatsApp messages. `GET /auth/me` returns authenticated user context and `GET /auth/companies` returns only active `UserCompanyAccess` companies. Product administration, RBAC enforcement beyond this boundary, billing, and ERP business modules remain future work.
 
-## Application Shell
+## Application Shell and Organization Setup
 
 P005 adds a protected, responsive ERP shell with a collapsible desktop sidebar, mobile drawer, header, breadcrumbs, dashboard foundation, company switcher, profile/logout controls, and global-search, quick-action, notification, help, theme, and language foundations. Navigation routes are placeholders only: no business workflows or fabricated transactional data are included. Product name, navigation configuration, and presentation tokens are centralized for future change. The included language preference supports English, Hindi, and Marathi as a translation foundation; English remains the current UI content.
+
+P006 makes **Masters / Setup** usable for the selected authorized company. It provides company profile/setup fields (including optional GST, contact, address, and logo URL foundation), optional branches, and optional warehouses. No default head-office branch or warehouse is generated. Every organization API requires the authenticated user's active `UserCompanyAccess` for the selected company and scopes reads/updates accordingly; a warehouse can reference only a branch in that same company. Company status and subscription control remain with Accline Services. P007 role-management and fine-grained authorization are not implemented.
 
 ## Development Workflow
 
@@ -124,7 +126,7 @@ P005 adds a protected, responsive ERP shell with a collapsible desktop sidebar, 
 
 ## Folder Overview
 
-The root folders separate durable context, implementation layers, documentation, automation, and infrastructure concerns. P002 introduced the runnable web application foundation; P003 adds identity/organization database infrastructure; P004 adds authentication; P005 adds the protected application shell and navigation foundation. Product modules remain future work.
+The root folders separate durable context, implementation layers, documentation, automation, and infrastructure concerns. P002 introduced the runnable web application foundation; P003 adds identity/organization database infrastructure; P004 adds authentication; P005 adds the protected application shell; P006 adds tenant-safe organization setup. P007 and business modules remain future work.
 
 ## Contribution Philosophy
 

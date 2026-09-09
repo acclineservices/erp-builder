@@ -6,6 +6,20 @@ Notable approved repository changes are recorded here. This is not a task backlo
 
 - No pending changes.
 
+## 2026-09-09 - P006: Implement company, branch and warehouse management
+
+### Added
+
+- Migration `c83a91d4e6f2` with additive company profile/setup fields, optional branch/warehouse location/contact fields, and optional warehouse-to-branch relation.
+- Authenticated, tenant-scoped organization API and service boundary. Every request validates active `UserCompanyAccess` for `X-Company-ID`; branch/warehouse object reads and updates are scoped to that company, and warehouse branch association is same-company only.
+- Setup screens for company profile/progress, optional branches, optional warehouses, empty states, lifecycle controls, and company-switcher-safe data refresh. Logo support is a storage-agnostic URL foundation only.
+
+### Validated
+
+- PostgreSQL healthy; Alembic at `c83a91d4e6f2`; `/health` and `/health/database` passed.
+- 21 backend tests passed, including P004 authentication regression and P006 tenant-isolation, lifecycle, zero-location, and warehouse-branch validation tests.
+- Frontend TypeScript/production build passed. Live development login, two-company context reads, and logout invalidation passed. No `.env` tracking, plaintext secret persistence, response secret leakage, or unrelated generated artifacts found.
+
 ## 2026-09-09 - P005: Implement application shell and navigation
 
 ### Added

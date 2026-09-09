@@ -7,7 +7,7 @@ This is the durable handover for ERP Builder. It records approved project contex
 **Repository:** `C:\Users\mukes\Workspace\ERP-Builder`  
 **Current product name:** ERP Builder  
 **Platform/operator:** Accline Services  
-**Checkpoint:** P005 application shell and navigation complete and validated on 2026-09-09. P006 is not started.
+**Checkpoint:** P006 company, branch, and warehouse management complete and validated on 2026-09-09. P007 is not started.
 
 ## Product purpose and principles
 
@@ -54,13 +54,21 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - Authorized company context is loaded only from the P004 company endpoint; single-company users have compact context display and multi-company users have a header switcher. Last-used selection is stored locally and revalidated against returned access.
 - Centralized product brand configuration, design tokens, and light/dark/system preferences; language preference foundation supports English, Hindi, and Marathi without claiming completed translations.
 
+### IMPLEMENTED - P006 company, branch, and warehouse management
+
+- Company profile/setup is available only in the selected authenticated company context, with legal/display names, extensible business type, optional GST/contact/address information, company status display, logo URL foundation, and a lightweight profile-completion indicator. Accline Services retains company status and subscription control; billing is not implemented.
+- Branches remain optional: no synthetic head-office branch is created. Authorized company-context users can list, create, edit, and activate/deactivate company-scoped branches.
+- Warehouses remain optional: no synthetic warehouse is created. Warehouses can be listed, created, edited, and activated/deactivated, and may have an optional branch from the same company only.
+- P006 migration `c83a91d4e6f2` adds only optional organization profile/location fields and the optional warehouse `branch_id` relation.
+- `/organization` endpoints require an authenticated session plus active `UserCompanyAccess` for `X-Company-ID`; every branch and warehouse lookup is constrained to that active company. P007 can add role policy checks at the service boundary without weakening tenant isolation.
+
 ### P003 database architecture
 
 | Area | Tables | Approved foundation |
 | --- | --- | --- |
 | Identity | `users`, `authentication_methods` | A user is independent of a company and must have email or mobile contact information. One user can have one record per supported authentication-method type. |
 | Tenancy | `companies`, `user_company_accesses` | A company is the tenant boundary. Users can have explicit active access to multiple companies. |
-| Optional organization | `branches`, `warehouses` | Each belongs to a company; neither is required. Warehouses are not yet tied to branches. |
+| Optional organization | `branches`, `warehouses` | Each belongs to a company; neither is required. A warehouse may optionally reference a branch in the same company. |
 | RBAC | `roles`, `permissions`, `role_permissions`, `role_assignments` | Roles are platform- or company-scoped. Assignments can be global or company-specific. No role/permission catalogue is seeded. |
 
 ## Approved decisions and requirements
@@ -77,8 +85,9 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - **IMPLEMENTED foundation:** every future customer business API must require active `UserCompanyAccess` for the selected company; a client-supplied company identifier or frontend hiding is insufficient authorization.
 - **IMPLEMENTED foundation:** `User.is_platform_admin` marks platform administration; platform access must be enforced server-side and is separate from customer administration.
 - **IMPLEMENTED:** server-side authenticated user and active-company access checks for the P004 authentication endpoints; platform-admin authentication has a separate route and session boundary.
-- **DEFERRED:** role-scope enforcement, role/permission seeding, customer/platform administration workflows, and authorization for future business APIs beyond the P004 company listing.
-- **OPEN:** detailed role/permission catalogue, customer-administrator policy after first-version testing, subscription association/pricing policy, and the warehouse-to-branch relationship.
+- **IMPLEMENTED:** P006 organization APIs independently validate an authenticated session and active `UserCompanyAccess` for the requested `X-Company-ID`; records cannot be read or changed across the selected company boundary. Warehouse-to-branch association is validated in the service layer for the same company.
+- **DEFERRED:** role-scope enforcement, role/permission seeding, customer/platform administration workflows, and authorization for future business APIs beyond the P006 organization boundary.
+- **OPEN:** detailed role/permission catalogue, customer-administrator policy after first-version testing, and subscription association/pricing policy.
 
 ### Application shell, experience, and customization
 
@@ -129,6 +138,14 @@ P005 live validation completed on 2026-09-09:
 - Health and database-health endpoints returned status ok.
 - A development-only review identity authenticated through the unchanged P004 flow, received only its two active UserCompanyAccess companies, and was rejected after logout.
 - Docker Compose serves the review application at http://localhost:5173; desktop/tablet/mobile layouts use CSS breakpoints, a collapsible desktop sidebar, and a mobile drawer.
+
+P006 live validation completed on 2026-09-09:
+
+- PostgreSQL Compose remained healthy and `alembic upgrade head` reached `c83a91d4e6f2`.
+- `GET /health` returned `{"status":"ok"}` and `GET /health/database` returned `{"status":"ok","database":"available"}`.
+- Backend tests: 21 passed, including P004 authentication regression tests and P006 company/branch/warehouse tenant-isolation, same-company branch-association, lifecycle, and zero-location tests.
+- Frontend TypeScript and production build passed. Live development authentication verified two authorized company contexts, context-specific organization reads, and logout invalidation.
+- No tracked `.env`, plaintext credential/OTP/token persistence, response secret leakage, or unrelated generated artifacts were found. Browser automation was unavailable in the validation environment; responsive layouts were verified through the implemented CSS breakpoints and production build.
 
 ## Documentation and handover practice
 
