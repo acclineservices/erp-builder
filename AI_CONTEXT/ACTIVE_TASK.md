@@ -2,28 +2,27 @@
 
 ## Task Identifier
 
-P003 — Identity & Organization Foundation
+P004 - Authentication Foundation
 
 ## Status
 
-**COMPLETE** - completed and validated on 2026-09-08. The PostgreSQL migration, live backend health checks, backend test suite, and frontend production build passed. Commit `7bbbd3eb2f57f2105879c1a6c185b6b7f940a354` is published on `origin/main`.
+**COMPLETE** - completed and validated on 2026-09-09. Migration `b71f4e9c2a10`, live PostgreSQL/backend checks, 18 backend tests (including 10 authentication tests), and the frontend production build passed.
 
-No successor implementation task is active. P004 and later stages are not started.
+No successor implementation task is active. P005 is not started.
 
 ## Scope
 
-Establish PostgreSQL, SQLAlchemy, Alembic, the initial identity/organization/RBAC data model, company-context primitives, development Docker migration flow, automated tests, and documentation handoff.
+Implement the authentication foundation: email/password and mobile OTP login, activation and verification, password recovery, server-side sessions, temporary failed-login protection, platform-admin boundary, authenticated user/company context, tests, and documentation handoff.
 
 ## Constraints
 
-- Preserve P002's frontend, basic backend health endpoint, and existing repository boundaries.
-- Do not implement login/logout, password authentication, OTP delivery/verification, user/company administration UI, billing, subscriptions, or ERP business modules.
-- PostgreSQL is used through Docker for local development; no direct Windows PostgreSQL installation is required.
+- Preserve P002/P003 foundations and existing repository boundaries.
+- Do not implement user/company administration workflows, paid production email/SMS/WhatsApp providers, billing, subscriptions, or ERP business modules.
+- Use the development notification-provider abstraction and keep secrets outside source control.
 
 ## Definition of Done
 
-- Environment-based database configuration, SQLAlchemy metadata discovery, and Alembic migrations are present.
-- Foundational identity, company, access, branch, warehouse, RBAC, and platform-administration structures are migrated and tested.
-- Branches and warehouses remain optional.
-- Users can have active access to multiple companies.
+- P004 authentication flows, account states, session behavior, platform boundary, and company-list restriction are implemented and tested.
+- Migration `b71f4e9c2a10` is applied and validated.
+- No plaintext passwords, OTPs, or tokens are persisted or exposed by normal API responses.
 - Documentation and developer instructions describe the delivered architecture and validation state.

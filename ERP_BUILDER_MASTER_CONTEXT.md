@@ -7,7 +7,7 @@ This is the durable handover for ERP Builder. It records approved project contex
 **Repository:** `C:\Users\mukes\Workspace\ERP-Builder`  
 **Current product name:** ERP Builder  
 **Platform/operator:** Accline Services  
-**Checkpoint:** P003 complete and published at `7bbbd3eb2f57f2105879c1a6c185b6b7f940a354` on `main` / `origin/main`.
+**Checkpoint:** P004 authentication foundation complete and validated on 2026-09-09. P005 is not started.
 
 ## Product purpose and principles
 
@@ -36,6 +36,16 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - Company-context primitive for future endpoints to check active user access to a requested company.
 - Initial test coverage for database foundations and health endpoints.
 
+### IMPLEMENTED - P004 authentication foundation
+
+- Email/password login, first-time activation, email/mobile verification, email and mobile-OTP password reset, and mobile-OTP login foundation.
+- Opaque, revocable server-side sessions with logout, fixed session timeout, optional Remember Me persistence, and temporary failed-login protection.
+- `invited`, `active`, and `inactive` user account states; only active users authenticate.
+- Separate platform-admin authentication routes and session cookie boundary.
+- Authenticated-user context (`/auth/me`) and accessible-company listing restricted to active `UserCompanyAccess` records.
+- P004 migration `b71f4e9c2a10` adds user-state fields plus `sessions`, `auth_tokens`, `otp_challenges`, and `security_events`.
+- Passwords, OTPs, and single-use tokens are stored only as hashes. Development notification delivery is an in-memory provider abstraction; no production email, SMS, or WhatsApp provider is integrated.
+
 ### P003 database architecture
 
 | Area | Tables | Approved foundation |
@@ -49,21 +59,22 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 
 ### Identity, authentication, and user management
 
-- **IMPLEMENTED foundation:** `email_password` and `mobile_otp` authentication-method records map to the same `User` identity where both are enabled.
-- **DEFERRED:** login, logout, password hashing implementation, OTP delivery/verification, recovery, user-management APIs, customer-management UI, and Accline Services administration UI.
-- **Security requirement:** never store plaintext passwords or OTPs. Future passwords require an adaptive industry-standard hash; OTPs must be short-lived and protected by the future authentication mechanism.
+- **IMPLEMENTED:** `email_password` and `mobile_otp` methods map to one `User`; the P004 flows enforce active, verified methods and account state before authentication.
+- **IMPLEMENTED:** bcrypt password and OTP hashing, short-lived/single-use activation, verification, reset tokens and OTPs, server-side session invalidation, and generic credential/recovery responses.
+- **DEFERRED:** user provisioning and management APIs/UI, customer-management UI, Accline Services administration UI, and paid/production notification-provider integration.
 - **OPEN:** the initial company Owner assignment workflow. A company creator does not automatically receive Owner rights; Accline Services controls the primary Owner assignment.
 
 ### Tenancy, branches, warehouses, and RBAC
 
 - **IMPLEMENTED foundation:** every future customer business API must require active `UserCompanyAccess` for the selected company; a client-supplied company identifier or frontend hiding is insufficient authorization.
 - **IMPLEMENTED foundation:** `User.is_platform_admin` marks platform administration; platform access must be enforced server-side and is separate from customer administration.
-- **DEFERRED:** authentication/authorization middleware, role-scope enforcement, role/permission seeding, and administration workflows.
+- **IMPLEMENTED:** server-side authenticated user and active-company access checks for the P004 authentication endpoints; platform-admin authentication has a separate route and session boundary.
+- **DEFERRED:** role-scope enforcement, role/permission seeding, customer/platform administration workflows, and authorization for future business APIs beyond the P004 company listing.
 - **OPEN:** detailed role/permission catalogue, customer-administrator policy after first-version testing, subscription association/pricing policy, and the warehouse-to-branch relationship.
 
 ### Application shell, experience, and customization
 
-- **IMPLEMENTED:** only the P002 responsive foundation page and backend-status feedback. It uses light/dark utility styling.
+- **IMPLEMENTED:** a responsive authentication page for email/password login, mobile OTP, activation, verification, and password recovery. It is not an approved authenticated application shell or navigation system.
 - **PLANNED:** a mobile-browser-capable product experience, language preferences, and light/dark/system theme preferences.
 - **PLANNED:** theme and branding customization, plus document/invoice layout customization.
 - **OPEN:** application shell/navigation information architecture, supported languages, default and persistence behavior for theme preference, branding scope, and document/invoice template model.
@@ -95,7 +106,14 @@ P003 live validation completed on 2026-09-08:
 - Frontend production build passed.
 - Commit `7bbbd3eb2f57f2105879c1a6c185b6b7f940a354` (`P003: Complete database foundation`) was pushed and verified on `origin/main`.
 
-No P004 or later implementation has started.
+P004 live validation completed on 2026-09-09:
+
+- Docker 29.7.2, Python 3.12.10, the project virtual environment, and PostgreSQL Compose service were verified healthy.
+- `alembic upgrade head` reached `b71f4e9c2a10`; all P004 authentication tables were present.
+- `GET /health` and `GET /health/database` returned `{"status":"ok"}`.
+- Backend tests: 18 passed, including 10 authentication tests; frontend production build passed.
+- Invalid live login returned the generic `401 Invalid credentials.` response. Tests cover inactive-user blocking, company access restriction, logout/session invalidation, OTP expiry/attempt limits, activation, verification, and resets.
+- No tracked `.env`, plaintext credential/OTP/token persistence, response secret leakage, or unrelated generated artifacts were found.
 
 ## Documentation and handover practice
 

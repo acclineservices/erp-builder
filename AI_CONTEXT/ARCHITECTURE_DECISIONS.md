@@ -56,6 +56,14 @@
 
 **Consequences:** Future branding and naming changes remain possible without redefining company isolation or platform architecture. The detailed branding/customization model is open.
 
+## AD-008 - Revocable opaque sessions and provider-agnostic authentication delivery
+
+**Context:** P004 requires browser authentication without exposing credentials, recovery values, or session internals to clients, while production email/SMS/WhatsApp providers remain undecided.
+
+**Decision:** Store only bcrypt password/OTP digests and SHA-256 digests of opaque session and single-use token values. Authenticate through `User` and enabled, verified `AuthenticationMethod` records; persist revocable sessions with normal or Remember Me expiry. Keep platform-admin sessions in a separate route and cookie boundary. Use an in-memory development notification provider and do not integrate a paid production provider.
+
+**Consequences:** Logout and password reset can invalidate server-side sessions; short-lived OTPs and tokens are attempt-limited or single-use. Production notification delivery, user provisioning, RBAC enforcement, and administration workflows remain separate decisions.
+
 ## Provisional Decisions
 
 The initial Owner assignment workflow, detailed role/permission catalogue, subscription association, warehouse-to-branch relationship, administrative policy, application shell/navigation, theme/language preferences, document-layout customization, and future integration/provider choices are intentionally provisional and must be reviewed after first-version testing.

@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
-from sqlalchemy import Boolean, CheckConstraint, Column, ForeignKey, Index, String, Table, Text, UniqueConstraint, text
+from sqlalchemy import Boolean, CheckConstraint, Column, DateTime, ForeignKey, Index, Integer, String, Table, Text, UniqueConstraint, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.types import Uuid
 
@@ -21,6 +22,9 @@ class User(TimestampMixin, Base):
     __tablename__ = "users"
     __table_args__ = (
         CheckConstraint("email IS NOT NULL OR mobile_number IS NOT NULL", name="user_contact_present"),
+        CheckConstraint(
+            "account_state IN ('invited', 'active', 'inactive')", name="user_account_state"
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
@@ -31,6 +35,13 @@ class User(TimestampMixin, Base):
     is_platform_admin: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False, server_default="false"
     )
+    account_state: Mapped[str] = mapped_column(
+        String(16), nullable=False, default="invited", server_default="invited"
+    )
+    email_verified: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
+    mobile_verified: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
+    failed_login_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
+    locked_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     authentication_methods: Mapped[list[AuthenticationMethod]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
@@ -41,6 +52,10 @@ class User(TimestampMixin, Base):
     role_assignments: Mapped[list[RoleAssignment]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
+    sessions: Mapped[list[Session]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    auth_tokens: Mapped[list[AuthToken]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    otp_challenges: Mapped[list[OtpChallenge]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    security_events: Mapped[list[SecurityEvent]] = relationship(back_populates="user", cascade="all, delete-orphan")
 
 
 class AuthenticationMethod(TimestampMixin, Base):
@@ -149,3 +164,65 @@ role_permissions = Table(
         primary_key=True,
     ),
 )
+
+
+class Session(TimestampMixin, Base):
+    """A revocable opaque browser session; only its digest is persisted."""
+
+    __tablename__ = "sessions"
+
+    id: Mapped[UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    remember_me: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
+    is_platform_session: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
+
+    user: Mapped[User] = relationship(back_populates="sessions")
+
+
+class AuthToken(TimestampMixin, Base):
+    """Single-use, hashed tokens for activation, email verification, and password reset."""
+
+    __tablename__ = "auth_tokens"
+    __table_args__ = (CheckConstraint("purpose IN ('activation', 'email_verification', 'password_reset')", name="auth_token_purpose"),)
+
+    id: Mapped[UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    purpose: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    consumed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    user: Mapped[User] = relationship(back_populates="auth_tokens")
+
+
+class OtpChallenge(TimestampMixin, Base):
+    """Short-lived, attempt-limited mobile OTP challenge with a bcrypt digest."""
+
+    __tablename__ = "otp_challenges"
+    __table_args__ = (CheckConstraint("purpose IN ('mobile_login', 'mobile_verification', 'mobile_password_reset')", name="otp_challenge_purpose"),)
+
+    id: Mapped[UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[UUID | None] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=True, index=True)
+    mobile_number: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
+    purpose: Mapped[str] = mapped_column(String(32), nullable=False, index=True)
+    code_hash: Mapped[str] = mapped_column(String(128), nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
+    consumed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    user: Mapped[User | None] = relationship(back_populates="otp_challenges")
+
+
+class SecurityEvent(TimestampMixin, Base):
+    """Minimal audit record that intentionally contains no credential or token values."""
+
+    __tablename__ = "security_events"
+
+    id: Mapped[UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    user_id: Mapped[UUID | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    event_type: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+
+    user: Mapped[User | None] = relationship(back_populates="security_events")

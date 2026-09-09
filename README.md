@@ -4,7 +4,7 @@
 
 ERP Builder is the engineering foundation for a long-term, commercial SaaS ERP platform. It provides a minimal web application plus a modular Identity & Organization database foundation so the product can grow through deliberate, secure decisions.
 
-ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable project handover, completed P003 scope, deferred work, and open decisions.
+ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable project handover, completed P004 scope, deferred work, and open decisions.
 
 ## Repository Structure
 
@@ -102,9 +102,11 @@ Build the frontend from `frontend/`:
 npm run build
 ```
 
-## Database Foundation
+## Identity, Organization, and Authentication Foundation
 
-The P003 database foundation uses PostgreSQL, SQLAlchemy 2.x, and Alembic. Users are independent of companies and can have explicit active access to multiple companies. Companies are the future business-data isolation boundary. Branches and warehouses each belong to a company but are optional. RBAC structures support platform and company roles without implementing any login, authorization middleware, billing, or ERP business module.
+P003 uses PostgreSQL, SQLAlchemy 2.x, and Alembic. Users are independent of companies and can have explicit active access to multiple companies. Companies are the business-data isolation boundary. Branches and warehouses each belong to a company but are optional.
+
+P004 adds email/password and mobile-OTP authentication, activation and email/mobile verification, email and mobile password recovery, revocable server-side sessions, Remember Me, temporary failed-login protection, and separate platform-admin authentication. Passwords, OTPs, and opaque token/session values are persisted only as hashes. The development notification abstraction intentionally does not send production email, SMS, or WhatsApp messages. `GET /auth/me` returns authenticated user context and `GET /auth/companies` returns only active `UserCompanyAccess` companies. Product administration, RBAC enforcement beyond this boundary, billing, and ERP business modules remain future work.
 
 ## Development Workflow
 
@@ -116,7 +118,7 @@ The P003 database foundation uses PostgreSQL, SQLAlchemy 2.x, and Alembic. Users
 
 ## Folder Overview
 
-The root folders separate durable context, implementation layers, documentation, automation, and infrastructure concerns. P002 introduced the runnable web application foundation; P003 adds the identity/organization database infrastructure only. Product modules remain future work.
+The root folders separate durable context, implementation layers, documentation, automation, and infrastructure concerns. P002 introduced the runnable web application foundation; P003 adds identity/organization database infrastructure; P004 adds the authentication foundation. Product modules remain future work.
 
 ## Contribution Philosophy
 
