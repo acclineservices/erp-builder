@@ -7,7 +7,8 @@ import { AuthPage } from "./pages/AuthPage";
 import { authApi, type AuthUser } from "./services/auth";
 
 function currentPath() {
-  return window.location.pathname === "/" ? "/auth" : window.location.pathname;
+  const normalized = window.location.pathname.replace(/\/+$/, "") || "/auth";
+  return normalized === "/" ? "/auth" : normalized;
 }
 
 export function App() {
@@ -27,7 +28,7 @@ export function App() {
   }, []);
 
   function navigate(destination: string, replace = false) {
-    if (window.location.pathname === destination) return;
+    if (currentPath() === destination) return;
     window.history[replace ? "replaceState" : "pushState"]({}, "", destination);
     setPath(destination);
   }
