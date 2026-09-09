@@ -29,6 +29,17 @@ class Settings(BaseSettings):
     postgres_port: int = Field(default=5432, ge=1, le=65535)
     database_url: str | None = None
 
+    auth_session_minutes: int = Field(default=480, ge=5, le=43200)
+    auth_remember_me_minutes: int = Field(default=43200, ge=60, le=525600)
+    auth_otp_minutes: int = Field(default=5, ge=1, le=30)
+    auth_otp_max_attempts: int = Field(default=5, ge=1, le=10)
+    auth_activation_hours: int = Field(default=24, ge=1, le=168)
+    auth_failed_login_limit: int = Field(default=5, ge=1, le=20)
+    auth_lock_minutes: int = Field(default=15, ge=1, le=1440)
+    auth_cookie_secure: bool = False
+    auth_cookie_name: str = "erp_builder_session"
+    auth_platform_cookie_name: str = "erp_builder_platform_session"
+
     @cached_property
     def cors_origins(self) -> list[str]:
         """Return explicitly configured browser origins for the API."""
