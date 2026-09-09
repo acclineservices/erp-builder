@@ -64,6 +64,14 @@
 
 **Consequences:** Logout and password reset can invalidate server-side sessions; short-lived OTPs and tokens are attempt-limited or single-use. Production notification delivery, user provisioning, RBAC enforcement, and administration workflows remain separate decisions.
 
+## AD-009 - Lightweight protected application shell with local presentation preferences
+
+**Context:** P005 needs a reviewable authenticated product surface before a full information architecture, translation scope, dashboard model, or UI framework is approved.
+
+**Decision:** Use a small React browser-history route layer and reusable shell components rather than adding a routing or UI-framework dependency. Gate frontend app routes through the existing P004 session endpoint and load company choices only through the existing authorized-company endpoint. Keep branding, navigation configuration, theme tokens, and local theme/language/last-company preferences centralized in frontend configuration.
+
+**Consequences:** The shell remains easy to revise after first-version review and does not weaken backend authorization. Local preferences are browser conveniences, not durable server-side profile/default-company settings. Business modules, translations, dashboard customization, and accessibility review remain future work.
+
 ## Provisional Decisions
 
 The initial Owner assignment workflow, detailed role/permission catalogue, subscription association, warehouse-to-branch relationship, administrative policy, application shell/navigation, theme/language preferences, document-layout customization, and future integration/provider choices are intentionally provisional and must be reviewed after first-version testing.

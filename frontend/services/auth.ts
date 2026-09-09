@@ -9,6 +9,11 @@ export type AuthUser = {
   is_platform_admin: boolean;
 };
 
+export type AccessibleCompany = {
+  id: string;
+  business_name: string;
+};
+
 type SessionResponse = { user: AuthUser; expires_at: string };
 
 async function request<T>(path: string, body?: object): Promise<T> {
@@ -25,6 +30,7 @@ async function request<T>(path: string, body?: object): Promise<T> {
 
 export const authApi = {
   me: () => request<SessionResponse>("/auth/me"),
+  companies: () => request<AccessibleCompany[]>("/auth/companies"),
   emailLogin: (email: string, password: string, remember_me: boolean) => request<SessionResponse>("/auth/login/email", { email, password, remember_me }),
   requestMobileLogin: (mobile_number: string) => request<{ message: string }>("/auth/login/mobile/request", { mobile_number }),
   verifyMobileLogin: (mobile_number: string, code: string, remember_me: boolean) => request<SessionResponse>("/auth/login/mobile/verify", { mobile_number, code, remember_me }),

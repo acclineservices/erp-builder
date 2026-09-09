@@ -6,6 +6,18 @@ Notable approved repository changes are recorded here. This is not a task backlo
 
 - No pending changes.
 
+## 2026-09-09 - P005: Implement application shell and navigation
+
+### Added
+
+- Protected frontend route foundation, responsive app shell, collapsible sidebar, mobile drawer, header, breadcrumbs, company switcher, profile/logout menu, search, quick-action, notification, help, and assistant placement foundations.
+- Dashboard and navigation placeholders that explicitly contain no business functionality or fabricated operational data.
+- Centralized brand configuration, design tokens, light/dark/system theme preference, and English/Hindi/Marathi language preference foundation.
+
+### Validated
+
+- Frontend TypeScript and production build, Docker Compose frontend review service, live P004 login/logout/company access, health endpoints, and 18 backend regression tests.
+
 ## 2026-09-09 - P004: Finalize authentication foundation
 
 ### Added

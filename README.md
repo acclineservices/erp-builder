@@ -4,7 +4,7 @@
 
 ERP Builder is the engineering foundation for a long-term, commercial SaaS ERP platform. It provides a minimal web application plus a modular Identity & Organization database foundation so the product can grow through deliberate, secure decisions.
 
-ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable project handover, completed P004 scope, deferred work, and open decisions.
+ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable project handover, completed P005 scope, deferred work, and open decisions.
 
 ## Repository Structure
 
@@ -78,6 +78,8 @@ npm run dev
 
 The frontend is available at `http://localhost:5173`.
 
+The authentication page is at http://localhost:5173/auth. After sign-in, the protected application shell opens at http://localhost:5173/app/dashboard.
+
 ### Docker Compose
 
 To run the complete development stack (PostgreSQL, backend, and frontend):
@@ -108,6 +110,10 @@ P003 uses PostgreSQL, SQLAlchemy 2.x, and Alembic. Users are independent of comp
 
 P004 adds email/password and mobile-OTP authentication, activation and email/mobile verification, email and mobile password recovery, revocable server-side sessions, Remember Me, temporary failed-login protection, and separate platform-admin authentication. Passwords, OTPs, and opaque token/session values are persisted only as hashes. The development notification abstraction intentionally does not send production email, SMS, or WhatsApp messages. `GET /auth/me` returns authenticated user context and `GET /auth/companies` returns only active `UserCompanyAccess` companies. Product administration, RBAC enforcement beyond this boundary, billing, and ERP business modules remain future work.
 
+## Application Shell
+
+P005 adds a protected, responsive ERP shell with a collapsible desktop sidebar, mobile drawer, header, breadcrumbs, dashboard foundation, company switcher, profile/logout controls, and global-search, quick-action, notification, help, theme, and language foundations. Navigation routes are placeholders only: no business workflows or fabricated transactional data are included. Product name, navigation configuration, and presentation tokens are centralized for future change. The included language preference supports English, Hindi, and Marathi as a translation foundation; English remains the current UI content.
+
 ## Development Workflow
 
 1. Review the relevant documents in `AI_CONTEXT/` before beginning work.
@@ -118,7 +124,7 @@ P004 adds email/password and mobile-OTP authentication, activation and email/mob
 
 ## Folder Overview
 
-The root folders separate durable context, implementation layers, documentation, automation, and infrastructure concerns. P002 introduced the runnable web application foundation; P003 adds identity/organization database infrastructure; P004 adds the authentication foundation. Product modules remain future work.
+The root folders separate durable context, implementation layers, documentation, automation, and infrastructure concerns. P002 introduced the runnable web application foundation; P003 adds identity/organization database infrastructure; P004 adds authentication; P005 adds the protected application shell and navigation foundation. Product modules remain future work.
 
 ## Contribution Philosophy
 

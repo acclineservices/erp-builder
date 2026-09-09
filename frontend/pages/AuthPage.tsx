@@ -1,14 +1,18 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 
+import { applicationBrand } from "../config/brand";
 import { authApi, type AuthUser } from "../services/auth";
 
 type View = "email" | "mobile" | "activate" | "verify" | "forgot" | "reset" | "mobileReset";
 
 const inputClass = "mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-950 outline-none focus:border-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-white";
 
-export function AuthPage() {
+type AuthPageProps = {
+  onAuthenticated: (user: AuthUser) => void;
+};
+
+export function AuthPage({ onAuthenticated }: AuthPageProps) {
   const [view, setView] = useState<View>("email");
-  const [user, setUser] = useState<AuthUser | null>(null);
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
@@ -21,16 +25,12 @@ export function AuthPage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    authApi.me().then(({ user: currentUser }) => setUser(currentUser)).catch(() => undefined);
-  }, []);
-
   async function submit(action: () => Promise<{ message?: string; user?: AuthUser }>) {
     setError("");
     setMessage("");
     try {
       const result = await action();
-      if (result.user) setUser(result.user);
+      if (result.user) onAuthenticated(result.user);
       setMessage(result.message ?? "You are signed in.");
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Something went wrong.");
@@ -44,12 +44,8 @@ export function AuthPage() {
     };
   }
 
-  if (user) {
-    return <main className="auth-page"><section className="auth-card"><p className="eyebrow">Signed in</p><h1>Welcome, {user.name}</h1><p>You have an active server-side session.</p><button onClick={() => void submit(async () => { const result = await authApi.logout(); setUser(null); return result; })}>Sign out</button></section></main>;
-  }
-
   return <main className="auth-page"><section className="auth-card">
-    <header><p className="eyebrow">ERP Builder</p><h1>Sign in</h1><p className="muted">Use your email and password, or your mobile number and a one-time code.</p></header>
+    <header><p className="eyebrow">{applicationBrand.productName}</p><h1>Sign in</h1><p className="muted">Use your email and password, or your mobile number and a one-time code.</p></header>
     <nav className="auth-tabs" aria-label="Authentication options">
       <button className={view === "email" ? "selected" : ""} onClick={() => setView("email")}>Email</button>
       <button className={view === "mobile" ? "selected" : ""} onClick={() => setView("mobile")}>Mobile OTP</button>
