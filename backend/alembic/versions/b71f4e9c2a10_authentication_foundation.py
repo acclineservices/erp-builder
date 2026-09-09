@@ -19,9 +19,10 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     op.add_column("users", sa.Column("account_state", sa.String(length=16), nullable=False, server_default="invited"))
-    op.create_check_constraint(
-        "user_account_state", "users", "account_state IN ('invited', 'active', 'inactive')"
-    )
+    with op.batch_alter_table("users") as batch_op:
+        batch_op.create_check_constraint(
+            "user_account_state", "account_state IN ('invited', 'active', 'inactive')"
+        )
     op.add_column("users", sa.Column("email_verified", sa.Boolean(), nullable=False, server_default=sa.text("false")))
     op.add_column("users", sa.Column("mobile_verified", sa.Boolean(), nullable=False, server_default=sa.text("false")))
     op.add_column("users", sa.Column("failed_login_count", sa.Integer(), nullable=False, server_default="0"))
@@ -115,7 +116,8 @@ def downgrade() -> None:
     op.drop_index(op.f("ix_sessions_expires_at"), table_name="sessions")
     op.drop_index(op.f("ix_sessions_user_id"), table_name="sessions")
     op.drop_table("sessions")
-    op.drop_constraint("ck_users_user_account_state", "users", type_="check")
+    with op.batch_alter_table("users") as batch_op:
+        batch_op.drop_constraint("user_account_state", type_="check")
     op.drop_column("users", "locked_until")
     op.drop_column("users", "failed_login_count")
     op.drop_column("users", "mobile_verified")

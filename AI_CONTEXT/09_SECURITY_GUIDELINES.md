@@ -8,10 +8,11 @@
 
 ## Identity and authentication
 
-- Never store plaintext passwords. Future password authentication must use an adaptive, industry-standard password hash.
-- Never store plaintext OTPs. OTPs must be short-lived and protected by the future authentication mechanism.
-- Email/password and mobile/OTP methods must resolve to the same `User` identity where both are enabled.
-- Do not expose credential hashes or authentication internals in API response schemas.
+- Never store plaintext passwords; P004 uses bcrypt password hashes.
+- Never store plaintext OTPs; P004 stores bcrypt OTP hashes, applies expiry and attempt limits, and does not expose them in normal API responses.
+- P004 stores only SHA-256 digests for opaque sessions and single-use activation, verification, and recovery tokens.
+- Email/password and mobile/OTP methods resolve to the same `User` identity where both are enabled and verified.
+- Do not expose credential hashes, tokens, OTPs, or authentication internals in API response schemas. Use generic login and recovery responses.
 
 ## Authorization
 
@@ -26,6 +27,8 @@
 - Keep secrets in environment configuration; do not commit `.env` files or production credentials.
 - Apply schema changes exclusively through reviewed Alembic migrations.
 - Use separate development, test, and production databases. Automated tests must never target production data.
+- Use server-side revocation for logout and password reset; treat platform-admin sessions as a separate cookie and route boundary.
+- The development notification provider is in-memory only. Production provider credentials and delivery controls must remain server-side and outside source control.
 - Product naming, branding, or frontend navigation must not be treated as an authorization or tenant-isolation mechanism.
 
 ## Deferred integrations
