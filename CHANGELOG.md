@@ -2,9 +2,20 @@
 
 Notable approved repository changes are recorded here. This is not a task backlog.
 
-## Unreleased
+## 2026-09-16 - P007: Implement user role and permission management
 
-- No pending changes.
+### Added
+
+- Migration `d07a3e1b4f91` for company-scoped roles, system-managed role state, company default branch/warehouse preferences, and company user-management audit events.
+- Tenant-safe `/administration` API and services for company user invitations/activation integration, active/inactive access, multiple roles, custom roles, cloning, additive permissions, safe reset/activation initiation, force logout, and audit events.
+- Eight fixed system-managed company roles and 30 current granular permissions, with Owner protection and administrator privilege-escalation prevention.
+- Protected `/app/users` Users, Roles, Permissions, and Security administration UI with company-switching data reload.
+
+### Validated
+
+- PostgreSQL healthy; Alembic at `d07a3e1b4f91`; `/health` and `/health/database` passed.
+- Full backend suite: 26 passed. P007 suite: 5 passed. Authentication/P006 regressions: 13 passed.
+- Live P007 bootstrap, tenant isolation, cross-company `403`, Owner protection, privilege-escalation prevention, frontend TypeScript/production build, and populated light/dark founder visual review passed. No review credentials, local-only fixtures, or `.env` files were committed.
 
 ## 2026-09-09 - P006: Implement company, branch and warehouse management
 

@@ -18,7 +18,10 @@
 
 - Platform administration and customer administration are separate backend concerns. Platform access requires explicit server-side checks.
 - Company creators do not automatically receive Owner rights; Accline Services controls the primary Owner assignment.
-- Customer administrators may manage other administrators for the first version; review this provisional policy after testing.
+- P007 administration requires both active company access and the relevant effective company permission; never treat company selection or UI hiding as authorization.
+- Effective company permissions are additive across role assignments. Administrators may not grant permissions they do not hold, and system-managed Owner access may not be mutated through ordinary company administration.
+- Branch/warehouse defaults are preferences, not authorization scope. Branch-level and warehouse-level authorization remain deferred.
+- Customer administrators may manage other administrators only within the permissions they hold; review this provisional policy after testing.
 
 ## Data protection and operations
 

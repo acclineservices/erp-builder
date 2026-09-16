@@ -7,7 +7,7 @@ This is the durable handover for ERP Builder. It records approved project contex
 **Repository:** `C:\Users\mukes\Workspace\ERP-Builder`  
 **Current product name:** ERP Builder  
 **Platform/operator:** Accline Services  
-**Checkpoint:** P006 company, branch, and warehouse management complete and validated on 2026-09-09. P007 is not started.
+**Checkpoint:** P007 company-scoped user, role, and permission management complete and validated on 2026-09-16. P008 has not started.
 
 ## Product purpose and principles
 
@@ -62,6 +62,15 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - P006 migration `c83a91d4e6f2` adds only optional organization profile/location fields and the optional warehouse `branch_id` relation.
 - `/organization` endpoints require an authenticated session plus active `UserCompanyAccess` for `X-Company-ID`; every branch and warehouse lookup is constrained to that active company. P007 can add role policy checks at the service boundary without weakening tenant isolation.
 
+### IMPLEMENTED - P007 user, role, and permission management
+
+- Company-scoped user management supports invitations through the existing activation flow, active/inactive company access, multiple role assignments, default branch/warehouse preferences, force logout, secure reset/activation initiation, and administrative audit events.
+- Each company receives eight fixed system-managed standard roles: Owner, Admin, Accountant, Sales User, Purchase User, Inventory User, Store Manager, and Viewer. Custom company roles can be created, edited, activated, and cloned.
+- The current granular permission catalogue contains 30 permissions. Effective permissions are additive across a user's active company role assignments; administrators cannot grant permissions they do not hold, and the system-managed Owner role is protected from ordinary company administration.
+- P007 migration `d07a3e1b4f91` makes roles company-scoped, adds company defaults to access grants, and adds company-scoped user-management audit events.
+- `/administration` enforces an authenticated active company context and required company permissions on every action. Cross-company access is rejected; branch and warehouse values remain convenience defaults, not authorization boundaries.
+- The protected `/app/users` route provides company-scoped Users, Roles, Permissions, and Security administration UI and reloads its administration data when the selected company changes.
+
 ### P003 database architecture
 
 | Area | Tables | Approved foundation |
@@ -69,7 +78,7 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 | Identity | `users`, `authentication_methods` | A user is independent of a company and must have email or mobile contact information. One user can have one record per supported authentication-method type. |
 | Tenancy | `companies`, `user_company_accesses` | A company is the tenant boundary. Users can have explicit active access to multiple companies. |
 | Optional organization | `branches`, `warehouses` | Each belongs to a company; neither is required. A warehouse may optionally reference a branch in the same company. |
-| RBAC | `roles`, `permissions`, `role_permissions`, `role_assignments` | Roles are platform- or company-scoped. Assignments can be global or company-specific. No role/permission catalogue is seeded. |
+| RBAC | `roles`, `permissions`, `role_permissions`, `role_assignments`, `user_management_audit_events` | P007 seeds 8 fixed company roles and 30 current permissions on demand; company assignments produce additive effective permissions. |
 
 ## Approved decisions and requirements
 
@@ -77,7 +86,8 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 
 - **IMPLEMENTED:** `email_password` and `mobile_otp` methods map to one `User`; the P004 flows enforce active, verified methods and account state before authentication.
 - **IMPLEMENTED:** bcrypt password and OTP hashing, short-lived/single-use activation, verification, reset tokens and OTPs, server-side session invalidation, and generic credential/recovery responses.
-- **DEFERRED:** user provisioning and management APIs/UI, customer-management UI, Accline Services administration UI, and paid/production notification-provider integration.
+- **IMPLEMENTED:** P007 company-scoped user provisioning/management UI and APIs, invitation/activation integration, role administration, safe security actions, and audit events.
+- **DEFERRED:** Accline Services platform-administration UI and paid/production notification-provider integration.
 - **OPEN:** the initial company Owner assignment workflow. A company creator does not automatically receive Owner rights; Accline Services controls the primary Owner assignment.
 
 ### Tenancy, branches, warehouses, and RBAC
@@ -86,8 +96,9 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - **IMPLEMENTED foundation:** `User.is_platform_admin` marks platform administration; platform access must be enforced server-side and is separate from customer administration.
 - **IMPLEMENTED:** server-side authenticated user and active-company access checks for the P004 authentication endpoints; platform-admin authentication has a separate route and session boundary.
 - **IMPLEMENTED:** P006 organization APIs independently validate an authenticated session and active `UserCompanyAccess` for the requested `X-Company-ID`; records cannot be read or changed across the selected company boundary. Warehouse-to-branch association is validated in the service layer for the same company.
-- **DEFERRED:** role-scope enforcement, role/permission seeding, customer/platform administration workflows, and authorization for future business APIs beyond the P006 organization boundary.
-- **OPEN:** detailed role/permission catalogue, customer-administrator policy after first-version testing, and subscription association/pricing policy.
+- **IMPLEMENTED:** P007 seeds fixed company roles and the current permission catalogue, requires active company access plus required permission for `/administration`, and prevents Owner mutation and administrator privilege escalation.
+- **DEFERRED:** branch-level and warehouse-level authorization scope, full Accline Services platform administration UI, and transactional-module permission enforcement until those modules exist.
+- **OPEN:** initial primary Owner assignment workflow, catalogue expansion as ERP modules are introduced, customer-administrator policy after first-version testing, and subscription association/pricing policy.
 
 ### Application shell, experience, and customization
 
@@ -146,6 +157,13 @@ P006 live validation completed on 2026-09-09:
 - Backend tests: 21 passed, including P004 authentication regression tests and P006 company/branch/warehouse tenant-isolation, same-company branch-association, lifecycle, and zero-location tests.
 - Frontend TypeScript and production build passed. Live development authentication verified two authorized company contexts, context-specific organization reads, and logout invalidation.
 - No tracked `.env`, plaintext credential/OTP/token persistence, response secret leakage, or unrelated generated artifacts were found. Browser automation was unavailable in the validation environment; responsive layouts were verified through the implemented CSS breakpoints and production build.
+
+P007 live validation completed on 2026-09-16:
+
+- PostgreSQL Compose was healthy; `alembic upgrade head` reached `d07a3e1b4f91`; `/health` and `/health/database` passed.
+- The full backend suite passed: 26 tests. The dedicated P007 suite passed: 5 tests. Authentication/P006 regressions passed: 13 tests.
+- Live P007 bootstrap returned the expected populated company data; cross-company access returned `403`. Tenant isolation, Owner protection, and administrator privilege-escalation prevention were validated.
+- Frontend TypeScript and production build passed. Founder visual review confirmed the populated Users & Roles UI, including Users, Roles, Permissions, and Security administration, is readable in light and dark themes.
 
 ## Documentation and handover practice
 

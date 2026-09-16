@@ -13,7 +13,7 @@ export const navigationItems: NavigationItem[] = [
   { label: "Accounting", path: "/app/accounting", icon: "accounting", description: "Accounting workflows will be introduced in a future module." },
   { label: "Reports", path: "/app/reports", icon: "reports", description: "Report workflows will be introduced in a future module." },
   { label: "Masters / Setup", path: "/app/setup", icon: "setup", description: "Company profile, branches, and warehouses." },
-  { label: "Users & Roles", path: "/app/users", icon: "users", description: "Administration workflows remain intentionally deferred." },
+  { label: "Users & Roles", path: "/app/users", icon: "users", description: "Company user, role, and permission administration." },
   { label: "Settings", path: "/app/settings", icon: "settings", description: "Personal and company settings will be introduced in a future module." },
 ];
 

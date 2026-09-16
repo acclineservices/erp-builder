@@ -3,7 +3,7 @@
 Import models here so Alembic can reliably discover the shared metadata.
 """
 
-from app.models.identity import AuthToken, AuthenticationMethod, OtpChallenge, Permission, Role, RoleAssignment, SecurityEvent, Session, User
+from app.models.identity import AuthToken, AuthenticationMethod, OtpChallenge, Permission, Role, RoleAssignment, SecurityEvent, Session, User, UserManagementAuditEvent
 from app.models.organization import Branch, Company, UserCompanyAccess, Warehouse
 
 __all__ = [
@@ -19,5 +19,6 @@ __all__ = [
     "Session",
     "User",
     "UserCompanyAccess",
+    "UserManagementAuditEvent",
     "Warehouse",
 ]

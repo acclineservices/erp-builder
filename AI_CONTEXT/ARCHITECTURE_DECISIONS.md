@@ -38,7 +38,7 @@
 
 **Decision:** Store role scope (`platform` or `company`), permissions, role-permission grants, and user role assignments. `User.is_platform_admin` is an explicit platform-administration marker; it is not a frontend-only convention.
 
-**Consequences:** Future authorization must enforce role scope and platform access server-side. No roles or permissions are seeded yet.
+**Consequences:** P007 enforces company-scoped administration permissions server-side. Platform administration remains a separate future workflow and UI.
 
 ## AD-006 — Authentication methods represent one user identity
 
@@ -80,6 +80,14 @@
 
 **Consequences:** Object-ID manipulation cannot reveal or change another selected tenant's organization records. P007 can add role-policy checks in the organization service layer without replacing the tenant boundary. Company branding is represented only by an optional logo URL foundation; storage and upload architecture remain deferred.
 
+## AD-011 - Company-scoped P007 administration with additive permissions
+
+**Context:** Company administration needs tenant-safe user, role, permission, and security controls without granting platform access or prematurely introducing operational-module scope rules.
+
+**Decision:** Require an authenticated active `UserCompanyAccess` for `X-Company-ID` and a specific effective company permission for every `/administration` action. Seed eight system-managed company roles and 30 current permissions on demand. Combine permissions additively across active company role assignments. Protect the system-managed Owner role; prevent administrators from assigning permissions they do not hold. Treat branch and warehouse defaults as user preferences only.
+
+**Consequences:** Cross-company administration is rejected, role changes cannot create privilege escalation, and P004 activation/reset/session-revocation capabilities are reused without exposing credentials. Branch/warehouse authorization scope, primary Owner assignment, platform-administration UI, and transactional-module permissions remain deferred.
+
 ## Provisional Decisions
 
-The initial Owner assignment workflow, detailed role/permission catalogue, subscription association, warehouse-to-branch relationship, administrative policy, application shell/navigation, theme/language preferences, document-layout customization, and future integration/provider choices are intentionally provisional and must be reviewed after first-version testing.
+The initial Owner assignment workflow, future transactional permission catalogue, subscription association, warehouse-to-branch relationship, branch/warehouse authorization scope, administrative policy, application shell/navigation, theme/language preferences, document-layout customization, and future integration/provider choices are intentionally provisional and must be reviewed after first-version testing.

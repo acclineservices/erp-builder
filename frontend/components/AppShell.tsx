@@ -4,6 +4,7 @@ import { applicationBrand, supportedLanguages, type LanguageCode, type ThemeMode
 import { navigationForPath, navigationItems, type NavigationItem } from "../config/navigation";
 import { authApi, type AccessibleCompany, type AuthUser } from "../services/auth";
 import { OrganizationPage } from "../pages/OrganizationPage";
+import { UsersRolesPage } from "../pages/UsersRolesPage";
 
 type AppShellProps = {
   user: AuthUser;
@@ -72,7 +73,7 @@ export function AppShell({ user, path, navigate, onLogout }: AppShellProps) {
     {mobileOpen && <button className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileOpen(false)} />}
     <section className="shell-content">
       <Header user={user} company={company} companies={companies} loading={companiesLoading} failed={companiesError} selectedCompanyId={selectedCompanyId} theme={theme} language={language} onMobileMenu={() => setMobileOpen(true)} onSelectCompany={setSelectedCompanyId} onThemeChange={setTheme} onLanguageChange={setLanguage} onSearch={() => setShowSearch(true)} onNavigate={go} onLogout={onLogout} />
-      <main className="workspace"><Breadcrumbs current={item.label} onNavigate={go} />{item.path === "/app/dashboard" ? <Dashboard user={user} company={company} loading={companiesLoading} /> : item.path === "/app/setup" ? <OrganizationPage key={selectedCompanyId} company={company} /> : <PlaceholderPage item={item} company={company} />}</main>
+      <main className="workspace"><Breadcrumbs current={item.label} onNavigate={go} />{item.path === "/app/dashboard" ? <Dashboard user={user} company={company} loading={companiesLoading} /> : item.path === "/app/setup" ? <OrganizationPage key={selectedCompanyId} company={company} /> : item.path === "/app/users" ? <UsersRolesPage key={selectedCompanyId} company={company} /> : <PlaceholderPage item={item} company={company} />}</main>
     </section>
     {showSearch && <SearchDialog onClose={() => setShowSearch(false)} onNavigate={go} />}
   </div>;

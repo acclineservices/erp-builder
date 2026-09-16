@@ -2,27 +2,26 @@
 
 ## Task Identifier
 
-P006 - Company, Branch & Warehouse Management
+P007 - User, Role & Permission Management
 
 ## Status
 
-**COMPLETE** - completed and validated on 2026-09-09. Tenant-scoped company setup, optional branch and warehouse management, same-company warehouse branch validation, lifecycle controls, frontend setup screens, live health/authentication/context checks, frontend production build, and 21 backend tests passed.
+**COMPLETE** - completed and validated on 2026-09-16. Company-scoped user and role administration, invitation/activation integration, granular permissions, safe security actions, audit events, tenant isolation, frontend Users & Roles UI, live API checks, frontend production build, and 26 backend tests passed.
 
-No successor implementation task is active. P007 is not started.
+No successor implementation task is active. P008 has not started.
 
 ## Scope
 
-Build the first authenticated ERP administration functionality: company setup, optional branches, optional warehouses, tenant-safe organization APIs, and setup screens without introducing P007 role management or business modules.
+Build company-scoped user management and RBAC administration without introducing transactional ERP modules or platform-administration UI.
 
 ## Constraints
 
-- Preserve P003 organization identity, P004 authentication/session/platform boundary, and P005 shell.
-- Enforce active UserCompanyAccess on every organization API; do not rely on browser filtering or enable cross-company branch association.
-- Do not implement P007 RBAC management, billing, document storage, or business modules.
+- Preserve active UserCompanyAccess as the tenant boundary and enforce required P007 permissions server-side.
+- Keep the primary Owner workflow under Accline Services control; prevent ordinary owner mutation and administrator privilege escalation.
+- Keep branch/warehouse authorization scope, platform-administration UI, billing, document storage, and business modules deferred.
 
 ## Definition of Done
 
-- Company profile data, setup progress, optional GST/contact/address fields, and status display are available in the selected authorized context.
-- Branches and warehouses support creation, editing, viewing, activation/deactivation, empty states, and no fake default operating locations.
-- Warehouse branch links are validated to the same company, and tenant-isolation/lifecycle/zero-location tests pass.
-- Documentation records P006 completion while P007 remains not started.
+- Users can be invited, activated through P004, assigned multiple company roles, made active/inactive for a company, and given same-company default branch/warehouse preferences.
+- Eight fixed roles, custom roles, cloning, 30 current permissions, additive effective permissions, Owner protection, privilege-escalation prevention, force logout, reset/activation initiation, audit events, and tenant isolation are implemented.
+- Users, Roles, Permissions, and Security administration are usable in `/app/users`; validation records Alembic `d07a3e1b4f91` and 26 backend tests passed.

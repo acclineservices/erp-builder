@@ -62,6 +62,8 @@ class UserCompanyAccess(TimestampMixin, Base):
         ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True
     )
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True, server_default="true")
+    default_branch_id: Mapped[UUID | None] = mapped_column(ForeignKey("branches.id", ondelete="RESTRICT"), nullable=True, index=True)
+    default_warehouse_id: Mapped[UUID | None] = mapped_column(ForeignKey("warehouses.id", ondelete="RESTRICT"), nullable=True, index=True)
 
     user: Mapped[User] = relationship(back_populates="company_accesses")
     company: Mapped[Company] = relationship(back_populates="user_accesses")

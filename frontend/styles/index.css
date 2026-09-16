@@ -91,3 +91,19 @@ button { color: inherit; }
   .app-shell, .sidebar-collapsed { grid-template-columns: minmax(0, 1fr); }
   .shell-content { grid-column: 1; }
 }
+
+/* P007 company administration reuses the shell tokens in every interaction state. */
+.administration-card { display: grid; gap: 1rem; }
+.admin-toolbar { display: flex; align-items: center; gap: .75rem; justify-content: space-between; color: var(--text-muted); font-size: .82rem; }
+.admin-toolbar input { width: min(100%, 22rem); border: 1px solid var(--line); border-radius: .45rem; padding: .58rem .65rem; background: var(--surface); color: var(--text); outline-color: var(--accent); }
+.admin-list, .audit-list { display: grid; gap: .5rem; }
+.admin-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .85rem 0; border-top: 1px solid var(--line); }
+.admin-row strong { color: var(--text); }.admin-row p, .admin-row small { display: block; margin: .2rem 0 0; color: var(--text-muted); font-size: .82rem; line-height: 1.45; }
+.admin-form { background: var(--surface-soft); }.admin-form .muted { margin: 0; font-size: .82rem; }
+.checkbox-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: .45rem .75rem; }
+.checkbox { display: flex !important; align-items: center; gap: .45rem; color: var(--text) !important; font-size: .82rem !important; font-weight: 600 !important; }
+.checkbox input { accent-color: var(--accent); }.checkbox input:disabled { cursor: not-allowed; }
+.permission-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: .7rem; }
+.permission-grid article { padding: .8rem; border: 1px solid var(--line); border-radius: .55rem; background: var(--surface-soft); }.permission-grid strong { color: var(--accent); font-size: .82rem; }.permission-grid p { margin: .3rem 0 0; color: var(--text-muted); font-size: .78rem; line-height: 1.45; }
+.audit-heading { margin: .6rem 0 0; font-size: 1rem; }.audit-list p { display: grid; gap: .15rem; margin: 0; padding: .7rem; border-radius: .45rem; background: var(--surface-soft); }.audit-list strong { color: var(--text); text-transform: capitalize; font-size: .85rem; }.audit-list span, .audit-list small { color: var(--text-muted); font-size: .76rem; }
+@media (max-width: 700px) { .admin-toolbar, .admin-row { align-items: stretch; flex-direction: column; }.admin-toolbar input { width: 100%; }.admin-row .location-actions { justify-content: flex-start; } }

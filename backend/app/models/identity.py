@@ -87,14 +87,18 @@ class Role(TimestampMixin, Base):
     __tablename__ = "roles"
     __table_args__ = (
         CheckConstraint("scope IN ('platform', 'company')", name="role_scope"),
-        UniqueConstraint("scope", "name", name="role_scope_name"),
+        UniqueConstraint("company_id", "name", name="company_role_name"),
     )
 
     id: Mapped[UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     scope: Mapped[str] = mapped_column(String(32), nullable=False)
+    company_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("companies.id", ondelete="CASCADE"), nullable=True, index=True
+    )
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True, server_default="true")
+    is_system_managed: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False, server_default="false")
 
     permissions: Mapped[list[Permission]] = relationship(
         secondary="role_permissions", back_populates="roles"
@@ -226,3 +230,16 @@ class SecurityEvent(TimestampMixin, Base):
     event_type: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
 
     user: Mapped[User | None] = relationship(back_populates="security_events")
+
+
+class UserManagementAuditEvent(TimestampMixin, Base):
+    """Minimal, company-scoped administrative audit event with no secret material."""
+
+    __tablename__ = "user_management_audit_events"
+
+    id: Mapped[UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid4)
+    company_id: Mapped[UUID] = mapped_column(ForeignKey("companies.id", ondelete="CASCADE"), nullable=False, index=True)
+    actor_user_id: Mapped[UUID | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    target_user_id: Mapped[UUID | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    action: Mapped[str] = mapped_column(String(64), nullable=False, index=True)
+    details: Mapped[str | None] = mapped_column(Text, nullable=True)

@@ -4,7 +4,7 @@
 
 ERP Builder is the engineering foundation for a long-term, commercial SaaS ERP platform. It provides a minimal web application plus a modular Identity & Organization database foundation so the product can grow through deliberate, secure decisions.
 
-ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable project handover, completed P006 scope, deferred work, and open decisions.
+ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable handover, completed P007 scope, deferred work, and open decisions.
 
 ## Repository Structure
 
@@ -114,7 +114,9 @@ P004 adds email/password and mobile-OTP authentication, activation and email/mob
 
 P005 adds a protected, responsive ERP shell with a collapsible desktop sidebar, mobile drawer, header, breadcrumbs, dashboard foundation, company switcher, profile/logout controls, and global-search, quick-action, notification, help, theme, and language foundations. Navigation routes are placeholders only: no business workflows or fabricated transactional data are included. Product name, navigation configuration, and presentation tokens are centralized for future change. The included language preference supports English, Hindi, and Marathi as a translation foundation; English remains the current UI content.
 
-P006 makes **Masters / Setup** usable for the selected authorized company. It provides company profile/setup fields (including optional GST, contact, address, and logo URL foundation), optional branches, and optional warehouses. No default head-office branch or warehouse is generated. Every organization API requires the authenticated user's active `UserCompanyAccess` for the selected company and scopes reads/updates accordingly; a warehouse can reference only a branch in that same company. Company status and subscription control remain with Accline Services. P007 role-management and fine-grained authorization are not implemented.
+P006 makes **Masters / Setup** usable for the selected authorized company. It provides company profile/setup fields (including optional GST, contact, address, and logo URL foundation), optional branches, and optional warehouses. No default head-office branch or warehouse is generated. Every organization API requires the authenticated user's active `UserCompanyAccess` for the selected company and scopes reads/updates accordingly; a warehouse can reference only a branch in that same company. Company status and subscription control remain with Accline Services.
+
+P007 makes **Users & Roles** usable for the selected authorized company. It provides company-scoped user invitations through the P004 activation flow, active/inactive company access, multiple role assignments, eight fixed system-managed roles, custom roles and cloning, a 30-permission catalogue, additive effective permissions, protected Owner access, administrator privilege-escalation prevention, default branch/warehouse preferences, secure reset/activation initiation, force logout, and audit events. `/administration` requires active company access and a specific company permission for every action; cross-company access is rejected. The `/app/users` UI includes Users, Roles, Permissions, and Security views and reloads data on company switching. Branch/warehouse authorization scope, full Accline Services platform-administration UI, and future transactional-module permissions remain deferred. Migration: `d07a3e1b4f91`.
 
 ## Development Workflow
 
@@ -126,7 +128,7 @@ P006 makes **Masters / Setup** usable for the selected authorized company. It pr
 
 ## Folder Overview
 
-The root folders separate durable context, implementation layers, documentation, automation, and infrastructure concerns. P002 introduced the runnable web application foundation; P003 adds identity/organization database infrastructure; P004 adds authentication; P005 adds the protected application shell; P006 adds tenant-safe organization setup. P007 and business modules remain future work.
+The root folders separate durable context, implementation layers, documentation, automation, and infrastructure concerns. P002 introduced the runnable web application foundation; P003 adds identity/organization database infrastructure; P004 adds authentication; P005 adds the protected application shell; P006 adds tenant-safe organization setup; and P007 adds company administration RBAC. Business modules remain future work.
 
 ## Contribution Philosophy
 
