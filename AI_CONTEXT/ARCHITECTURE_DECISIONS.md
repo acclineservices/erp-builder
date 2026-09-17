@@ -108,6 +108,12 @@
 
 **Consequences:** GRNs capture accepted/rejected Goods quantities, receipt date, warehouse preference, and source links for P011, but do not post stock. Purchase invoices preserve supplier, dates, due date, and totals for future accounting, but do not post journals, supplier balances, input tax credit, or statutory GST logic.
 
+## AD-015 - Linked purchase lines remain commercial and receipt foundations
+
+**Decision:** Retain PO-line references on GRN lines and add optional PO-line/GRN-line references on purchase-invoice lines. Permit draft editing only; finalizing a GRN validates remaining ordered quantity across prior received GRNs and synchronizes the PO to Partially Received or Received.
+
+**Consequences:** The workflow supports partial receipts and future three-way matching without an inventory ledger. P011 is the only stage authorized to post accepted quantities to stock.
+
 ## Provisional Decisions
 
 The initial Owner assignment workflow, future transactional permission catalogue, subscription association, warehouse-to-branch relationship, branch/warehouse authorization scope, administrative policy, application shell/navigation, theme/language preferences, document-layout customization, and future integration/provider choices are intentionally provisional and must be reviewed after first-version testing.

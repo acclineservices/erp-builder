@@ -89,6 +89,7 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - Company-scoped Purchase Orders, Goods Receipts (GRNs), and Purchase Invoices preserve supplier/item/UOM/description/rate/tax snapshots, Decimal totals, and `PO-0001`, `GRN-0001`, and `PI-0001` company-local numbering.
 - PO drafts can be submitted, approved, or cancelled; GRNs can be cancelled; invoice drafts can be approved or cancelled. All operations use active company context, P007 purchase permissions, same-company supplier/item/warehouse/document validation, and audit events.
 - GRNs retain accepted/rejected Goods receipt facts but create no stock ledger or item balance. Purchase invoices retain commercial/due-date foundations but create no supplier ledger or journal posting. `/app/purchases` is a company-switch-safe responsive workspace.
+- P010 enhancement adds editable draft documents, multi-line entry, PO-to-GRN and PO/GRN-to-invoice prefills, source-line references, partial/multiple Goods receipts, remaining-quantity checks, and linked-document actions. Migration `h010a1b2c3d4` adds invoice source-line traceability only.
 
 ### P003 database architecture
 

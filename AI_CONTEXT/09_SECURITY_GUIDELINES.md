@@ -8,6 +8,7 @@
 - P008 Party requests must also require the appropriate P007 customer/supplier permission and scope every Party lookup to the authorized company; return `404` for a Party outside that company context.
 - P009 item/category requests require active company context plus P007 item permission; codes, barcodes, categories, and optional warehouse references are validated within that company.
 - P010 purchase requests require the active company context plus P007 purchase permission. Supplier, item, branch, warehouse, PO, GRN, and invoice references are resolved only in that company; lifecycle actions and audit events remain server-side.
+- Linked GRN and invoice source-line references are additionally validated server-side for company, item, and source-document consistency; browser-prefilled values do not grant access or bypass draft-only edit controls.
 
 ## Identity and authentication
 

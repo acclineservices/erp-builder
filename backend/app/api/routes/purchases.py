@@ -14,9 +14,11 @@ def require(context,db,code):
     except admin.AdministrationForbidden as error: raise HTTPException(403,"You do not have permission for this purchase action.") from error
 def serial(document):
     result={key:getattr(document,key) for key in ("id","number","status","supplier_id","purchase_order_id","goods_receipt_id","order_date","receipt_date","supplier_invoice_number","supplier_invoice_date","document_date","due_date","subtotal","discount_total","tax_total","round_off","grand_total") if hasattr(document,key)}
+    if getattr(document, "purchase_order", None): result["purchase_order_number"] = document.purchase_order.number
+    if getattr(document, "goods_receipt", None): result["goods_receipt_number"] = document.goods_receipt.number
     result["supplier_name"]=document.supplier.display_name; result["lines"]=[]
     for line in document.lines:
-        result["lines"].append({key:getattr(line,key) for key in ("id","item_id","item_name","item_code","description","uom_code","quantity","unit_rate","discount_percent","gst_rate","base_amount","discount_amount","tax_amount","line_total","ordered_quantity","received_quantity","accepted_quantity","rejected_quantity","remarks") if hasattr(line,key)})
+        result["lines"].append({key:getattr(line,key) for key in ("id","item_id","item_name","item_code","description","uom_code","quantity","unit_rate","discount_percent","gst_rate","base_amount","discount_amount","tax_amount","line_total","ordered_quantity","received_quantity","accepted_quantity","rejected_quantity","remarks","purchase_order_line_id","goods_receipt_line_id") if hasattr(line,key)})
     return result
 def document_or_404(document):
     if not document: raise HTTPException(404,"The requested purchase document is not available in this company.")
@@ -49,18 +51,32 @@ def transition_order(document_id:UUID,action:str,context:AuthorizedCompanyContex
     return handle(work)
 @router.get("/receipts")
 def list_receipts(search:str|None=None,status_filter:str|None=Query(None,alias="status"),context:AuthorizedCompanyContext=Depends(require_authorized_company_context),db:Session=Depends(get_db)): require(context,db,"purchases.view"); return [serial(x) for x in service.receipts(db,context.company.id,search,status_filter)]
+@router.get("/receipts/{document_id}")
+def get_receipt(document_id:UUID,context:AuthorizedCompanyContext=Depends(require_authorized_company_context),db:Session=Depends(get_db)): require(context,db,"purchases.view"); return serial(document_or_404(service.receipt(db,context.company.id,document_id)))
 @router.post("/receipts",status_code=status.HTTP_201_CREATED)
 def create_receipt(payload:GoodsReceiptInput,context:AuthorizedCompanyContext=Depends(require_authorized_company_context),db:Session=Depends(get_db)):
     require(context,db,"purchases.create")
     def work(): item=service.create_receipt(db,context.company,context.user,payload);db.commit();return serial(service.receipt(db,context.company.id,item.id))
     return handle(work)
-@router.post("/receipts/{document_id}/cancel")
-def cancel_receipt(document_id:UUID,context:AuthorizedCompanyContext=Depends(require_authorized_company_context),db:Session=Depends(get_db)):
-    require(context,db,"purchases.cancel");document=document_or_404(service.receipt(db,context.company.id,document_id))
-    def work(): service.cancel_receipt(db,context.company,context.user,document);db.commit();return serial(document)
+@router.put("/receipts/{document_id}")
+def update_receipt(document_id:UUID,payload:GoodsReceiptInput,context:AuthorizedCompanyContext=Depends(require_authorized_company_context),db:Session=Depends(get_db)):
+    require(context,db,"purchases.edit");document=document_or_404(service.receipt(db,context.company.id,document_id))
+    def work(): service.update_receipt(db,context.company,context.user,document,payload);db.commit();return serial(service.receipt(db,context.company.id,document.id))
+    return handle(work)
+@router.post("/receipts/{document_id}/{action}")
+def transition_receipt(document_id:UUID,action:str,context:AuthorizedCompanyContext=Depends(require_authorized_company_context),db:Session=Depends(get_db)):
+    permission={"receive":"purchases.edit","cancel":"purchases.cancel"}.get(action)
+    if not permission: raise HTTPException(404,"Unknown goods receipt action.")
+    require(context,db,permission);document=document_or_404(service.receipt(db,context.company.id,document_id))
+    def work():
+        if action=="receive": service.receive_receipt(db,context.company,context.user,document)
+        else: service.cancel_receipt(db,context.company,context.user,document)
+        db.commit();return serial(document)
     return handle(work)
 @router.get("/invoices")
 def list_invoices(search:str|None=None,status_filter:str|None=Query(None,alias="status"),context:AuthorizedCompanyContext=Depends(require_authorized_company_context),db:Session=Depends(get_db)): require(context,db,"purchases.view");return [serial(x) for x in service.invoices(db,context.company.id,search,status_filter)]
+@router.get("/invoices/{document_id}")
+def get_invoice(document_id:UUID,context:AuthorizedCompanyContext=Depends(require_authorized_company_context),db:Session=Depends(get_db)): require(context,db,"purchases.view");return serial(document_or_404(service.invoice(db,context.company.id,document_id)))
 @router.post("/invoices",status_code=status.HTTP_201_CREATED)
 def create_invoice(payload:PurchaseInvoiceInput,context:AuthorizedCompanyContext=Depends(require_authorized_company_context),db:Session=Depends(get_db)):
     require(context,db,"purchases.create")

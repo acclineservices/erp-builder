@@ -124,6 +124,8 @@ P009 adds **Items** and **Item Categories** at `/app/items` and `/app/items/cate
 
 P010 adds **Purchases** at `/app/purchases`. It provides company-scoped Purchase Orders, Goods Receipts, and Purchase Invoices with supplier/item snapshots, Decimal line totals, company-local `PO-0001`/`GRN-0001`/`PI-0001` numbering, controlled document lifecycle, P007 purchase permissions, audit events, and same-company validation for suppliers, items, warehouses, and document links. GRNs preserve accepted Goods receipt facts for P011 but do not post stock; invoices preserve accounting-ready commercial facts but do not post journals, supplier balances, or statutory GST. Migration: `g010a1b2c3d4`.
 
+P010 also supports multi-line draft editing and linked PO → GRN → Invoice creation. GRNs preserve PO-line source references, enforce remaining received quantity across partial receipts, and move POs through Partially Received/Received. Invoice lines can retain PO/GRN source-line references. Migration: `h010a1b2c3d4`.
+
 ## Development Workflow
 
 1. Review the relevant documents in `AI_CONTEXT/` before beginning work.

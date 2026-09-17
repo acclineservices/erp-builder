@@ -2,6 +2,17 @@
 
 Notable approved repository changes are recorded here. This is not a task backlog.
 
+## 2026-09-17 - P010: Complete linked multi-line purchase workflow
+
+### Added
+
+- Editable draft PO, GRN, and invoice forms with multiple lines, add/remove controls, immediate previews, detail actions, and source-prefilled PO → GRN and PO/GRN → Invoice flows.
+- Partial/multiple GRN foundation, remaining-quantity validation, PO receipt-status updates, and invoice PO/GRN-line traceability migration `h010a1b2c3d4`.
+
+### Validated
+
+- Full backend suite: 34 passed, including linked P010 workflow tests. PostgreSQL migration, health endpoints, TypeScript, and frontend production build passed.
+
 ## 2026-09-17 - P010: Implement purchase management foundation
 
 ### Added

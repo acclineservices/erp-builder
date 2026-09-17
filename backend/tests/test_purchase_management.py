@@ -33,6 +33,7 @@ def test_purchase_documents_lifecycle_totals_audit_and_tenant(client,database):
     assert client.post(f"/purchases/orders/{body['id']}/submit",headers=h(first)).json()["status"]=="submitted"
     assert client.post(f"/purchases/orders/{body['id']}/approve",headers=h(first)).json()["status"]=="approved"
     grn=client.post("/purchases/receipts",headers=h(first),json={"supplier_id":str(supplier.id),"purchase_order_id":body["id"],"receipt_date":str(date.today()),"lines":[{"item_id":str(item.id),"received_quantity":2,"accepted_quantity":2,"rejected_quantity":0}]});assert grn.status_code==201 and grn.json()["number"]=="GRN-0001"
+    assert client.post(f"/purchases/receipts/{grn.json()['id']}/receive",headers=h(first)).status_code==200
     invoice=client.post("/purchases/invoices",headers=h(first),json={"supplier_id":str(supplier.id),"goods_receipt_id":grn.json()["id"],"supplier_invoice_number":"VENDOR-1","supplier_invoice_date":str(date.today()),"document_date":str(date.today()),"round_off":0,"lines":[line(item)]});assert invoice.status_code==201 and invoice.json()["number"]=="PI-0001"
     assert client.post("/purchases/receipts",headers=h(first),json={"supplier_id":str(supplier.id),"receipt_date":str(date.today()),"lines":[{"item_id":str(service.id),"received_quantity":1,"accepted_quantity":1}]}).status_code==422
     assert client.post("/purchases/orders",headers=h(first),json={**payload,"supplier_id":str(foreign_supplier.id)}).status_code==422
@@ -43,3 +44,23 @@ def test_purchase_permission_rejection(client,database):
     first,_,user,supplier,item,*_=setup(database,client)
     for assignment in database.scalars(select(RoleAssignment).where(RoleAssignment.user_id==user.id)): database.delete(assignment)
     database.commit();assert client.get("/purchases/orders",headers=h(first)).status_code==403
+
+def test_multiline_draft_edit_partial_receipts_and_invoice_traceability(client,database):
+    first,_,_,supplier,item,*_=setup(database,client)
+    second_item=Item(company=first,name="Connector",code="ITEM-0003",item_type="goods",uom_code="PCS",purchase_price=4,selling_price=6);database.add(second_item);database.commit()
+    payload={"supplier_id":str(supplier.id),"order_date":str(date.today()),"round_off":0,"lines":[line(item,5,10),line(second_item,3,4)]}
+    po=client.post("/purchases/orders",headers=h(first),json=payload);assert po.status_code==201 and len(po.json()["lines"])==2
+    changed={**payload,"lines":[line(item,6,11),line(second_item,3,4)]};assert client.put(f"/purchases/orders/{po.json()['id']}",headers=h(first),json=changed).status_code==200
+    assert client.post(f"/purchases/orders/{po.json()['id']}/submit",headers=h(first)).status_code==200;assert client.post(f"/purchases/orders/{po.json()['id']}/approve",headers=h(first)).status_code==200
+    current=client.get(f"/purchases/orders/{po.json()['id']}",headers=h(first)).json(); first_line=current["lines"][0]
+    grn_payload={"supplier_id":str(supplier.id),"purchase_order_id":po.json()["id"],"receipt_date":str(date.today()),"lines":[{"item_id":str(item.id),"purchase_order_line_id":first_line["id"],"received_quantity":2,"accepted_quantity":2,"rejected_quantity":0}]}
+    grn=client.post("/purchases/receipts",headers=h(first),json=grn_payload);assert grn.status_code==201 and grn.json()["status"]=="draft"
+    assert client.post(f"/purchases/receipts/{grn.json()['id']}/receive",headers=h(first)).json()["status"]=="received"
+    assert client.get(f"/purchases/orders/{po.json()['id']}",headers=h(first)).json()["status"]=="partially_received"
+    over={**grn_payload,"lines":[{**grn_payload["lines"][0],"received_quantity":5,"accepted_quantity":5}]};assert client.post("/purchases/receipts",headers=h(first),json=over).status_code==422
+    remaining={**grn_payload,"lines":[{**grn_payload["lines"][0],"received_quantity":4,"accepted_quantity":4}]};grn2=client.post("/purchases/receipts",headers=h(first),json=remaining);assert grn2.status_code==201;assert client.post(f"/purchases/receipts/{grn2.json()['id']}/receive",headers=h(first)).status_code==200
+    second_line=client.get(f"/purchases/orders/{po.json()['id']}",headers=h(first)).json()["lines"][1];final_grn=client.post("/purchases/receipts",headers=h(first),json={"supplier_id":str(supplier.id),"purchase_order_id":po.json()["id"],"receipt_date":str(date.today()),"lines":[{"item_id":str(second_item.id),"purchase_order_line_id":second_line["id"],"received_quantity":3,"accepted_quantity":3,"rejected_quantity":0}]});assert final_grn.status_code==201;assert client.post(f"/purchases/receipts/{final_grn.json()['id']}/receive",headers=h(first)).status_code==200;assert client.get(f"/purchases/orders/{po.json()['id']}",headers=h(first)).json()["status"]=="received"
+    invoice=client.post("/purchases/invoices",headers=h(first),json={"supplier_id":str(supplier.id),"purchase_order_id":po.json()["id"],"goods_receipt_id":grn.json()["id"],"supplier_invoice_number":"TRACE-1","supplier_invoice_date":str(date.today()),"document_date":str(date.today()),"round_off":0,"lines":[{**line(item,2,11),"purchase_order_line_id":first_line["id"],"goods_receipt_line_id":grn.json()["lines"][0]["id"]}]});assert invoice.status_code==201 and invoice.json()["lines"][0]["purchase_order_line_id"]==first_line["id"]
+    assert client.put(f"/purchases/orders/{po.json()['id']}",headers=h(first),json=changed).status_code==422
+    assert client.post(f"/purchases/invoices/{invoice.json()['id']}/approve",headers=h(first)).status_code==200
+    assert client.put(f"/purchases/invoices/{invoice.json()['id']}",headers=h(first),json={"supplier_id":str(supplier.id),"supplier_invoice_number":"TRACE-1","supplier_invoice_date":str(date.today()),"document_date":str(date.today()),"round_off":0,"lines":[line(item)]}).status_code==422

@@ -6,6 +6,8 @@ from pydantic import BaseModel, Field, model_validator
 
 class CommercialLineInput(BaseModel):
     item_id: UUID
+    purchase_order_line_id: UUID | None = None
+    goods_receipt_line_id: UUID | None = None
     quantity: Decimal = Field(gt=0, max_digits=14, decimal_places=3)
     unit_rate: Decimal = Field(ge=0, max_digits=14, decimal_places=2)
     discount_percent: Decimal = Field(default=Decimal("0"), ge=0, le=100, max_digits=5, decimal_places=2)
