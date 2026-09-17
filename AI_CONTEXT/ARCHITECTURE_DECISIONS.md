@@ -88,6 +88,14 @@
 
 **Consequences:** Cross-company administration is rejected, role changes cannot create privilege escalation, and P004 activation/reset/session-revocation capabilities are reused without exposing credentials. Branch/warehouse authorization scope, primary Owner assignment, platform-administration UI, and transactional-module permissions remain deferred.
 
+## AD-012 - Shared company-scoped Party foundation for customers and suppliers
+
+**Context:** Customer and supplier masters need common identity, contact, address, tax, commercial, lifecycle, tenant, and authorization rules without prematurely building CRM or transactions.
+
+**Decision:** Model one company-scoped `Party` as Customer, Supplier, or Both, with extensible primary contact/address child records and locked company-local customer/supplier counters. Require authenticated active-company context and P007 customer/supplier permissions for every `/parties` operation; scope object lookups to the selected company and record party administration audit events. Validate GST/PAN formats and require GSTIN for registered/composition status.
+
+**Consequences:** One business entity can safely serve both roles without duplicate master records, cross-company object IDs return `404`, and browser company selection cannot grant access. Advanced CRM, multiple-contact UI, advanced address management, GST calculations, e-invoice/e-way bill, configurable numbering, and sales/purchase transactions remain deferred.
+
 ## Provisional Decisions
 
 The initial Owner assignment workflow, future transactional permission catalogue, subscription association, warehouse-to-branch relationship, branch/warehouse authorization scope, administrative policy, application shell/navigation, theme/language preferences, document-layout customization, and future integration/provider choices are intentionally provisional and must be reviewed after first-version testing.

@@ -13,6 +13,7 @@ from app.db.base import Base, TimestampMixin
 
 if TYPE_CHECKING:
     from app.models.identity import User
+    from app.models.party import Party
 
 
 class Company(TimestampMixin, Base):
@@ -46,6 +47,7 @@ class Company(TimestampMixin, Base):
     warehouses: Mapped[list[Warehouse]] = relationship(
         back_populates="company", cascade="all, delete-orphan"
     )
+    parties: Mapped[list[Party]] = relationship(back_populates="company", cascade="all, delete-orphan")
 
 
 class UserCompanyAccess(TimestampMixin, Base):

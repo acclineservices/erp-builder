@@ -2,6 +2,20 @@
 
 Notable approved repository changes are recorded here. This is not a task backlog.
 
+## 2026-09-17 - P008: Implement customer and supplier management
+
+### Added
+
+- Migration `e008a1b2c3d4` for company-scoped shared Party records, extensible primary contact/address foundations, and locked customer/supplier code sequences.
+- Tenant-safe `/parties` API and services for Customer, Supplier, and Both with company-local `CUS-0001`/`SUP-0001` codes, GST/PAN validation, commercial fields, search/filter, active/inactive lifecycle, P007 permission checks, and party audit events.
+- Protected `/app/customers` and `/app/suppliers` management UI, navigation integration, company-switching reload, and a reusable API validation-error formatter that prevents structured FastAPI errors from rendering as `[object Object]`.
+
+### Validated
+
+- PostgreSQL healthy; Alembic at `e008a1b2c3d4`; `/health` and `/health/database` passed.
+- Full backend suite: 29 passed. P008 suite: 3 passed. Authentication/P006/P007 regressions: 18 passed. Frontend TypeScript and production build passed.
+- Live Customer/Supplier create, generated codes, contact/address persistence, edit, lifecycle, search/filter, readable validation errors, tenant isolation, and permission enforcement passed. Founder visual review approved Customers/Suppliers in light/dark and mobile layouts. No review credentials, temporary records, or `.env` files were committed.
+
 ## 2026-09-16 - P007: Implement user role and permission management
 
 ### Added

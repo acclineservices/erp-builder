@@ -2,7 +2,7 @@
 
 ## Repository Status
 
-P007 is **COMPLETE**. The durable handover is [`ERP_BUILDER_MASTER_CONTEXT.md`](../ERP_BUILDER_MASTER_CONTEXT.md). P008 has not started.
+P008 is **COMPLETE**. The durable handover is [`ERP_BUILDER_MASTER_CONTEXT.md`](../ERP_BUILDER_MASTER_CONTEXT.md). P009 has not started.
 
 ## Current Application Foundation
 
@@ -13,19 +13,20 @@ P007 is **COMPLETE**. The durable handover is [`ERP_BUILDER_MASTER_CONTEXT.md`](
 - **IMPLEMENTED:** P005 protected application shell with responsive navigation, dashboard/route placeholders, company switcher, user menu/logout, global-search/quick-action/notification/help foundations, and brand/theme/language preference foundations.
 - **IMPLEMENTED:** P006 company profile/setup, optional branch and warehouse management, optional same-company warehouse-to-branch association, lifecycle controls, and tenant-scoped organization APIs integrated into the authenticated setup screen.
 - **IMPLEMENTED:** P007 company-scoped users, invitations/activation integration, active/inactive access, multiple roles, 8 fixed system-managed roles, custom roles and cloning, 30 granular permissions, additive effective permissions, Owner and privilege-escalation protections, default branch/warehouse preferences, force logout, reset/activation initiation, audit events, tenant-safe administration APIs, and Users/Roles/Permissions/Security UI.
-- **DEFERRED:** ERP business modules, branch/warehouse authorization scope, Accline Services platform-administration UI, production notification providers, billing, and subscriptions.
+- **IMPLEMENTED:** P008 shared company-scoped Party management for Customer, Supplier, and Both; primary contact/address foundations; generated customer/supplier codes; GST/PAN and commercial fields; active/inactive lifecycle; search/filter; P007 permission enforcement; tenant-safe party APIs; audit events; and Customers/Suppliers UI with company-switching reload and readable API validation errors.
+- **DEFERRED:** Advanced CRM, multiple-contact UI, advanced multi-address management, GST calculations, e-invoice/e-way bill, sales/purchase transactions, configurable numbering, branch/warehouse authorization scope, platform administration, production notifications, billing, subscriptions, and P009 functionality.
 - **PLANNED:** mobile-browser support, language and theme preferences, branding and document-layout customization, WhatsApp/SMS, GST/e-way bill, QR/barcode, and AI-assistant capabilities. Their detailed designs remain open.
 
 ## Validation Status
 
-- P007 live validation completed on 2026-09-16: PostgreSQL Compose is healthy and Alembic is current at `d07a3e1b4f91`.
+- P008 live validation completed on 2026-09-17: PostgreSQL Compose is healthy and Alembic is current at `e008a1b2c3d4`.
 - `GET /health` and `GET /health/database` succeed against the running PostgreSQL database.
-- The full backend suite passes: 26 tests; the P007 suite passes: 5 tests; authentication/P006 regressions pass: 13 tests. The frontend TypeScript check and production build succeed.
-- Live P007 bootstrap, tenant isolation, cross-company `403`, Owner protection, privilege-escalation prevention, and populated light/dark Users & Roles visual review passed.
+- The full backend suite passes: 29 tests; the P008 suite passes: 3 tests; authentication/P006/P007 regressions pass: 18 tests. The frontend TypeScript check and production build succeed.
+- Live customer/supplier creation, generated codes, contact/address persistence, edit, lifecycle, readable validation errors, tenant isolation, cross-company `404`, and permission `403` passed. Founder visual review approved usable Customers/Suppliers screens, light/dark styling, and mobile responsiveness.
 
 ## Risks and Blockers
 
-- Future business APIs still need explicit company and role authorization; P007 currently enforces this policy for company administration only.
+- Future business APIs must continue P008's explicit active-company and P007 permission checks; frontend company selection remains presentation only.
 - **OPEN:** initial Owner assignment workflow, catalogue expansion for future ERP modules, and full platform-administration workflows/UI.
 - Production notification-provider selection and operational delivery controls remain open.
 - Branch/warehouse authorization scope remains deferred; P006 continues to enforce active UserCompanyAccess at its service boundary. Persistent defaults beyond P007 preferences, translations, dashboard customization, document/logo storage, and broader accessibility review remain future work.

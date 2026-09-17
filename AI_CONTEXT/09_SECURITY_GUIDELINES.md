@@ -5,6 +5,7 @@
 - Treat company context as a fundamental authorization boundary for every future customer business API.
 - Verify the authenticated user has active `UserCompanyAccess` for the selected company before reading or writing its data.
 - Do not rely on client-selected company identifiers or frontend hiding as authorization.
+- P008 Party requests must also require the appropriate P007 customer/supplier permission and scope every Party lookup to the authorized company; return `404` for a Party outside that company context.
 
 ## Identity and authentication
 
@@ -20,6 +21,7 @@
 - Company creators do not automatically receive Owner rights; Accline Services controls the primary Owner assignment.
 - P007 administration requires both active company access and the relevant effective company permission; never treat company selection or UI hiding as authorization.
 - Effective company permissions are additive across role assignments. Administrators may not grant permissions they do not hold, and system-managed Owner access may not be mutated through ordinary company administration.
+- Customer/supplier create, edit, view, and lifecycle actions use the current P007 permission catalogue and write audit events; frontend navigation and company switching do not replace these checks.
 - Branch/warehouse defaults are preferences, not authorization scope. Branch-level and warehouse-level authorization remain deferred.
 - Customer administrators may manage other administrators only within the permissions they hold; review this provisional policy after testing.
 
@@ -27,6 +29,7 @@
 
 - Use UUID primary identifiers for externally addressable foundational entities.
 - Enforce foreign keys, uniqueness, checks, and indexes at the database level where supported.
+- Treat GSTIN, PAN, business contact details, and commercial master data as company business data. Validate structured API errors into safe user-facing messages; never expose stack traces or persistence internals.
 - Keep secrets in environment configuration; do not commit `.env` files or production credentials.
 - Apply schema changes exclusively through reviewed Alembic migrations.
 - Use separate development, test, and production databases. Automated tests must never target production data.

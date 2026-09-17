@@ -1,12 +1,14 @@
 export type NavigationItem = {
   label: string;
   path: string;
-  icon: "home" | "sales" | "purchases" | "inventory" | "accounting" | "reports" | "setup" | "users" | "settings";
+  icon: "home" | "sales" | "purchases" | "inventory" | "accounting" | "reports" | "setup" | "users" | "settings" | "customers" | "suppliers";
   description: string;
 };
 
 export const navigationItems: NavigationItem[] = [
   { label: "Dashboard", path: "/app/dashboard", icon: "home", description: "Your workspace overview." },
+  { label: "Customers", path: "/app/customers", icon: "customers", description: "Company customer master data." },
+  { label: "Suppliers", path: "/app/suppliers", icon: "suppliers", description: "Company supplier master data." },
   { label: "Sales", path: "/app/sales", icon: "sales", description: "Sales workflows will be introduced in a future module." },
   { label: "Purchases", path: "/app/purchases", icon: "purchases", description: "Purchase workflows will be introduced in a future module." },
   { label: "Inventory", path: "/app/inventory", icon: "inventory", description: "Inventory workflows will be introduced in a future module." },

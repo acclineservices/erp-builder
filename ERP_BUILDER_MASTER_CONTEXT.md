@@ -7,7 +7,7 @@ This is the durable handover for ERP Builder. It records approved project contex
 **Repository:** `C:\Users\mukes\Workspace\ERP-Builder`  
 **Current product name:** ERP Builder  
 **Platform/operator:** Accline Services  
-**Checkpoint:** P007 company-scoped user, role, and permission management complete and validated on 2026-09-16. P008 has not started.
+**Checkpoint:** P008 customer and supplier management complete and validated on 2026-09-17. P009 has not started.
 
 ## Product purpose and principles
 
@@ -71,6 +71,13 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - `/administration` enforces an authenticated active company context and required company permissions on every action. Cross-company access is rejected; branch and warehouse values remain convenience defaults, not authorization boundaries.
 - The protected `/app/users` route provides company-scoped Users, Roles, Permissions, and Security administration UI and reloads its administration data when the selected company changes.
 
+### IMPLEMENTED - P008 customer and supplier management
+
+- A shared company-scoped `Party` foundation supports Customer, Supplier, and Both, with primary contact/address records, GST/PAN identity fields, commercial fields, active/inactive lifecycle, and searchable customer/supplier views.
+- Customer and supplier codes are generated independently per company (`CUS-0001` and `SUP-0001` style). GSTIN is required for registered/composition parties; GSTIN, PAN, and company-local code/GSTIN uniqueness are validated server-side.
+- `/parties` requires authenticated active-company context and P007 customer/supplier permissions. Every lookup is company-scoped, including a cross-company object-ID `404`; create, update, and lifecycle actions write company audit events.
+- Protected `/app/customers` and `/app/suppliers` provide customer/supplier management, company-switching reload, search/filter, edit, and lifecycle controls. A reusable frontend API-error formatter turns FastAPI validation detail arrays into safe, readable messages.
+
 ### P003 database architecture
 
 | Area | Tables | Approved foundation |
@@ -79,6 +86,7 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 | Tenancy | `companies`, `user_company_accesses` | A company is the tenant boundary. Users can have explicit active access to multiple companies. |
 | Optional organization | `branches`, `warehouses` | Each belongs to a company; neither is required. A warehouse may optionally reference a branch in the same company. |
 | RBAC | `roles`, `permissions`, `role_permissions`, `role_assignments`, `user_management_audit_events` | P007 seeds 8 fixed company roles and 30 current permissions on demand; company assignments produce additive effective permissions. |
+| Parties | `parties`, `party_contacts`, `party_addresses`, `party_code_sequences` | P008 stores one company-scoped business party as Customer, Supplier, or Both; contacts/addresses are extensible foundations and counters generate company-local customer/supplier codes. |
 
 ## Approved decisions and requirements
 
@@ -97,6 +105,7 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - **IMPLEMENTED:** server-side authenticated user and active-company access checks for the P004 authentication endpoints; platform-admin authentication has a separate route and session boundary.
 - **IMPLEMENTED:** P006 organization APIs independently validate an authenticated session and active `UserCompanyAccess` for the requested `X-Company-ID`; records cannot be read or changed across the selected company boundary. Warehouse-to-branch association is validated in the service layer for the same company.
 - **IMPLEMENTED:** P007 seeds fixed company roles and the current permission catalogue, requires active company access plus required permission for `/administration`, and prevents Owner mutation and administrator privilege escalation.
+- **IMPLEMENTED:** P008 `/parties` requires the same active-company boundary plus P007 customer/supplier permission checks, scopes every Party query to the authorized company, and records party administration audit events.
 - **DEFERRED:** branch-level and warehouse-level authorization scope, full Accline Services platform administration UI, and transactional-module permission enforcement until those modules exist.
 - **OPEN:** initial primary Owner assignment workflow, catalogue expansion as ERP modules are introduced, customer-administrator policy after first-version testing, and subscription association/pricing policy.
 
@@ -164,6 +173,13 @@ P007 live validation completed on 2026-09-16:
 - The full backend suite passed: 26 tests. The dedicated P007 suite passed: 5 tests. Authentication/P006 regressions passed: 13 tests.
 - Live P007 bootstrap returned the expected populated company data; cross-company access returned `403`. Tenant isolation, Owner protection, and administrator privilege-escalation prevention were validated.
 - Frontend TypeScript and production build passed. Founder visual review confirmed the populated Users & Roles UI, including Users, Roles, Permissions, and Security administration, is readable in light and dark themes.
+
+P008 live validation completed on 2026-09-17:
+
+- PostgreSQL Compose was healthy and Alembic reached `e008a1b2c3d4`; `/health` and `/health/database` returned 200.
+- The full backend suite passed: 29 tests. The dedicated P008 suite passed: 3 tests. Authentication/P006/P007 regressions passed: 18 tests. Frontend TypeScript and production build passed.
+- Live customer/supplier create, generated codes, contact/address persistence, edit, lifecycle, search/filter, readable validation errors, tenant isolation, and permission enforcement passed. Founder visual review approved Customers and Suppliers in light/dark and mobile layouts.
+- Advanced CRM, multiple-contact UI, advanced multi-address management, GST calculations, e-invoice/e-way bill, sales/purchase transactions, configurable numbering, and P009 remain deferred.
 
 ## Documentation and handover practice
 

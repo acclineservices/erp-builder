@@ -5,6 +5,7 @@ import { navigationForPath, navigationItems, type NavigationItem } from "../conf
 import { authApi, type AccessibleCompany, type AuthUser } from "../services/auth";
 import { OrganizationPage } from "../pages/OrganizationPage";
 import { UsersRolesPage } from "../pages/UsersRolesPage";
+import { PartiesPage } from "../pages/PartiesPage";
 
 type AppShellProps = {
   user: AuthUser;
@@ -16,6 +17,7 @@ type AppShellProps = {
 type IconName = NavigationItem["icon"] | "menu" | "search" | "bell" | "bolt" | "chevron" | "help" | "logout" | "assistant";
 
 const iconLabels: Record<IconName, string> = {
+  customers: "C", suppliers: "S",
   home: "⌂", sales: "↗", purchases: "↓", inventory: "□", accounting: "#", reports: "▥", setup: "◇", users: "♙", settings: "⚙",
   menu: "☰", search: "⌕", bell: "◌", bolt: "+", chevron: "⌄", help: "?", logout: "→", assistant: "✦",
 };
@@ -73,7 +75,7 @@ export function AppShell({ user, path, navigate, onLogout }: AppShellProps) {
     {mobileOpen && <button className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileOpen(false)} />}
     <section className="shell-content">
       <Header user={user} company={company} companies={companies} loading={companiesLoading} failed={companiesError} selectedCompanyId={selectedCompanyId} theme={theme} language={language} onMobileMenu={() => setMobileOpen(true)} onSelectCompany={setSelectedCompanyId} onThemeChange={setTheme} onLanguageChange={setLanguage} onSearch={() => setShowSearch(true)} onNavigate={go} onLogout={onLogout} />
-      <main className="workspace"><Breadcrumbs current={item.label} onNavigate={go} />{item.path === "/app/dashboard" ? <Dashboard user={user} company={company} loading={companiesLoading} /> : item.path === "/app/setup" ? <OrganizationPage key={selectedCompanyId} company={company} /> : item.path === "/app/users" ? <UsersRolesPage key={selectedCompanyId} company={company} /> : <PlaceholderPage item={item} company={company} />}</main>
+      <main className="workspace"><Breadcrumbs current={item.label} onNavigate={go} />{item.path === "/app/dashboard" ? <Dashboard user={user} company={company} loading={companiesLoading} /> : item.path === "/app/setup" ? <OrganizationPage key={selectedCompanyId} company={company} /> : item.path === "/app/users" ? <UsersRolesPage key={selectedCompanyId} company={company} /> : item.path === "/app/customers" ? <PartiesPage key={selectedCompanyId} company={company} role="customer" /> : item.path === "/app/suppliers" ? <PartiesPage key={selectedCompanyId} company={company} role="supplier" /> : <PlaceholderPage item={item} company={company} />}</main>
     </section>
     {showSearch && <SearchDialog onClose={() => setShowSearch(false)} onNavigate={go} />}
   </div>;
