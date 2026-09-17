@@ -2,6 +2,11 @@
 
 Notable approved repository changes are recorded here. This is not a task backlog.
 
+## 2026-09-17 - P010: Improve purchase entry and voucher printing
+
+- Added reusable searchable selectors, blank manual item lines, manual invoice items beside linked lines, PO-linked GRN line control, and direct browser-print PO/GRN/Invoice vouchers with A4 print CSS.
+- Advanced document templates, PDF generation, email/WhatsApp sharing, and QR output remain deferred.
+
 ## 2026-09-17 - P010: Complete linked multi-line purchase workflow
 
 ### Added

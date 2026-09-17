@@ -126,6 +126,8 @@ P010 adds **Purchases** at `/app/purchases`. It provides company-scoped Purchase
 
 P010 also supports multi-line draft editing and linked PO → GRN → Invoice creation. GRNs preserve PO-line source references, enforce remaining received quantity across partial receipts, and move POs through Partially Received/Received. Invoice lines can retain PO/GRN source-line references. Migration: `h010a1b2c3d4`.
 
+Purchase entry uses searchable company-scoped suppliers/items, starts manual lines empty, permits manual invoice additions beside linked lines, and offers browser-printable PO, GRN, and Invoice vouchers. Advanced templates and PDF generation remain deferred.
+
 ## Development Workflow
 
 1. Review the relevant documents in `AI_CONTEXT/` before beginning work.
