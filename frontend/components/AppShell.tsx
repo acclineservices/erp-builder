@@ -7,6 +7,7 @@ import { OrganizationPage } from "../pages/OrganizationPage";
 import { UsersRolesPage } from "../pages/UsersRolesPage";
 import { PartiesPage } from "../pages/PartiesPage";
 import { ItemsPage } from "../pages/ItemsPage";
+import { PurchasesPage } from "../pages/PurchasesPage";
 
 type AppShellProps = {
   user: AuthUser;
@@ -77,7 +78,7 @@ export function AppShell({ user, path, navigate, onLogout }: AppShellProps) {
     {mobileOpen && <button className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileOpen(false)} />}
     <section className="shell-content">
       <Header user={user} company={company} companies={companies} loading={companiesLoading} failed={companiesError} selectedCompanyId={selectedCompanyId} theme={theme} language={language} onMobileMenu={() => setMobileOpen(true)} onSelectCompany={setSelectedCompanyId} onThemeChange={setTheme} onLanguageChange={setLanguage} onSearch={() => setShowSearch(true)} onNavigate={go} onLogout={onLogout} />
-      <main className="workspace"><Breadcrumbs current={item.label} onNavigate={go} />{item.path === "/app/dashboard" ? <Dashboard user={user} company={company} loading={companiesLoading} /> : item.path === "/app/setup" ? <OrganizationPage key={selectedCompanyId} company={company} /> : item.path === "/app/users" ? <UsersRolesPage key={selectedCompanyId} company={company} /> : item.path === "/app/customers" ? <PartiesPage key={selectedCompanyId} company={company} role="customer" /> : item.path === "/app/suppliers" ? <PartiesPage key={selectedCompanyId} company={company} role="supplier" /> : item.path === "/app/items" ? <ItemsPage key={selectedCompanyId} company={company} /> : item.path === "/app/items/categories" ? <ItemsPage key={selectedCompanyId} company={company} mode="categories" /> : <PlaceholderPage item={item} company={company} />}</main>
+      <main className="workspace"><Breadcrumbs current={item.label} onNavigate={go} />{item.path === "/app/dashboard" ? <Dashboard user={user} company={company} loading={companiesLoading} /> : item.path === "/app/setup" ? <OrganizationPage key={selectedCompanyId} company={company} /> : item.path === "/app/users" ? <UsersRolesPage key={selectedCompanyId} company={company} /> : item.path === "/app/customers" ? <PartiesPage key={selectedCompanyId} company={company} role="customer" /> : item.path === "/app/suppliers" ? <PartiesPage key={selectedCompanyId} company={company} role="supplier" /> : item.path === "/app/items" ? <ItemsPage key={selectedCompanyId} company={company} /> : item.path === "/app/items/categories" ? <ItemsPage key={selectedCompanyId} company={company} mode="categories" /> : item.path === "/app/purchases" ? <PurchasesPage key={selectedCompanyId} company={company} /> : <PlaceholderPage item={item} company={company} />}</main>
     </section>
     {showSearch && <SearchDialog onClose={() => setShowSearch(false)} onNavigate={go} />}
   </div>;

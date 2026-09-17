@@ -4,7 +4,7 @@
 
 ERP Builder is the engineering foundation for a long-term, commercial SaaS ERP platform. It provides a minimal web application plus a modular Identity & Organization database foundation so the product can grow through deliberate, secure decisions.
 
-ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable handover, completed P009 scope, deferred work, and open decisions.
+ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable handover, completed P010 scope, deferred work, and open decisions.
 
 ## Repository Structure
 
@@ -122,6 +122,8 @@ P008 makes **Customers** and **Suppliers** usable in the selected authorized com
 
 P009 adds **Items** and **Item Categories** at `/app/items` and `/app/items/categories`. Goods and Services use company-scoped `ITEM-0001` codes, controlled standard UOMs, HSN/SAC and GST-rate foundations, decimal prices, category, barcode/image fields, lifecycle, and P007 permissions/audit. Goods can store inventory setup fields and an optional same-company default warehouse; no stock ledger or transaction is created. Migration: `f009a1b2c3d4`.
 
+P010 adds **Purchases** at `/app/purchases`. It provides company-scoped Purchase Orders, Goods Receipts, and Purchase Invoices with supplier/item snapshots, Decimal line totals, company-local `PO-0001`/`GRN-0001`/`PI-0001` numbering, controlled document lifecycle, P007 purchase permissions, audit events, and same-company validation for suppliers, items, warehouses, and document links. GRNs preserve accepted Goods receipt facts for P011 but do not post stock; invoices preserve accounting-ready commercial facts but do not post journals, supplier balances, or statutory GST. Migration: `g010a1b2c3d4`.
+
 ## Development Workflow
 
 1. Review the relevant documents in `AI_CONTEXT/` before beginning work.
@@ -132,7 +134,7 @@ P009 adds **Items** and **Item Categories** at `/app/items` and `/app/items/cate
 
 ## Folder Overview
 
-The root folders separate durable context, implementation layers, documentation, automation, and infrastructure concerns. P002 introduced the runnable web application foundation; P003 adds identity/organization database infrastructure; P004 adds authentication; P005 adds the protected application shell; P006 adds tenant-safe organization setup; P007 adds company administration RBAC; and P008 adds customer/supplier master management. P009 has not started.
+The root folders separate durable context, implementation layers, documentation, automation, and infrastructure concerns. P002 introduced the runnable web application foundation; P003 adds identity/organization database infrastructure; P004 adds authentication; P005 adds the protected application shell; P006 adds tenant-safe organization setup; P007 adds company administration RBAC; P008 adds customer/supplier masters; P009 adds item masters; and P010 adds purchase-document foundations. P011 has not started.
 
 ## Contribution Philosophy
 

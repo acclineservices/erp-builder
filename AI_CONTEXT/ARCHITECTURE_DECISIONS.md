@@ -102,6 +102,12 @@
 
 **Consequences:** Items can support future sales, purchases, inventory, tax, barcode, and pricing work without prematurely implementing those modules. UOM conversion, price lists, GST calculation, scanning/printing, image storage, and configurable numbering remain deferred.
 
+## AD-014 - Purchase documents preserve commercial facts, not ledgers
+
+**Decision:** P010 stores company-scoped PO, GRN, and purchase invoice headers/lines with server-calculated Decimal totals and snapshots of item identity/UOM/description/rate/tax reference. Simple percentage discount and a provisional aggregate tax amount are retained as a commercial foundation. Per-company locked counters create `PO-0001`, `GRN-0001`, and `PI-0001` values.
+
+**Consequences:** GRNs capture accepted/rejected Goods quantities, receipt date, warehouse preference, and source links for P011, but do not post stock. Purchase invoices preserve supplier, dates, due date, and totals for future accounting, but do not post journals, supplier balances, input tax credit, or statutory GST logic.
+
 ## Provisional Decisions
 
 The initial Owner assignment workflow, future transactional permission catalogue, subscription association, warehouse-to-branch relationship, branch/warehouse authorization scope, administrative policy, application shell/navigation, theme/language preferences, document-layout customization, and future integration/provider choices are intentionally provisional and must be reviewed after first-version testing.

@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from app.models.identity import User
     from app.models.party import Party
     from app.models.item import Item, ItemCategory
+    from app.models.purchase import GoodsReceipt, PurchaseInvoice, PurchaseOrder
 
 
 class Company(TimestampMixin, Base):
@@ -51,6 +52,9 @@ class Company(TimestampMixin, Base):
     parties: Mapped[list[Party]] = relationship(back_populates="company", cascade="all, delete-orphan")
     items: Mapped[list[Item]] = relationship(back_populates="company", cascade="all, delete-orphan")
     item_categories: Mapped[list[ItemCategory]] = relationship(back_populates="company", cascade="all, delete-orphan")
+    purchase_orders: Mapped[list[PurchaseOrder]] = relationship(back_populates="company", cascade="all, delete-orphan")
+    goods_receipts: Mapped[list[GoodsReceipt]] = relationship(back_populates="company", cascade="all, delete-orphan")
+    purchase_invoices: Mapped[list[PurchaseInvoice]] = relationship(back_populates="company", cascade="all, delete-orphan")
 
 
 class UserCompanyAccess(TimestampMixin, Base):

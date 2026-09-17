@@ -2,26 +2,26 @@
 
 ## Task Identifier
 
-P009 - Product & Item Master Management
+P010 - Purchase Management Foundation
 
 ## Status
 
-**COMPLETE** - completed and validated on 2026-09-17. Company-scoped Goods/Service item masters, categories, controlled UOMs, pricing/tax/inventory foundations, RBAC/audit, tenant isolation, UI, migration, backend tests, and frontend build passed.
+**COMPLETE** - completed and validated on 2026-09-17. Company-scoped Purchase Orders, GRNs, and Purchase Invoices, Decimal totals, lifecycle, P007 permissions/audit, tenant isolation, UI, migration, backend tests, and frontend build passed.
 
-No successor implementation task is active. P010 has not started.
+No successor implementation task is active. P011 has not started.
 
 ## Scope
 
-Build company-scoped customer/supplier master management without introducing advanced CRM, transactional ERP modules, or P009 functionality.
+Build company-scoped purchase document foundations without inventory posting, sales, accounting posting, or a full GST engine.
 
 ## Constraints
 
-- Preserve active UserCompanyAccess as the tenant boundary and enforce required P007 customer/supplier permissions server-side.
-- Keep GST calculations, e-invoice/e-way bill, configurable numbering, sales/purchase transactions, and advanced CRM/contact/address management deferred.
-- Do not start P009.
+- Preserve active UserCompanyAccess as the tenant boundary and enforce P007 purchase permissions server-side.
+- Keep stock ledger (P011), Sales (P012), accounting/supplier ledger, full GST, e-invoice/e-way bill, advanced approvals/PDFs/attachments deferred.
+- Do not start P011.
 
 ## Definition of Done
 
-- Customer, Supplier, and Both Party records support validated contact/address, tax, and commercial foundations; company-local codes, lifecycle, search/filter, audit, RBAC, and tenant isolation are enforced.
-- Customers and Suppliers are usable at `/app/customers` and `/app/suppliers`, reload with company switching, and format structured API validation errors safely.
-- Validation records Alembic `e008a1b2c3d4`, 29 backend tests, 3 P008 tests, 18 prior-module regression tests, frontend build, live create/edit/lifecycle checks, and founder visual review.
+- PO/GRN/Invoice records preserve commercial snapshots, use local numbering and Decimal totals, and enforce controlled lifecycle, audit, RBAC, and tenant isolation.
+- `/app/purchases` reloads on company switching and uses the reusable safe API-error formatting.
+- Validation records Alembic `g010a1b2c3d4`, 33 backend tests including 2 P010 tests, health endpoints, TypeScript, and production build.

@@ -12,7 +12,7 @@ export const navigationItems: NavigationItem[] = [
   { label: "Items", path: "/app/items", icon: "items", description: "Company item and service master data." },
   { label: "Item Categories", path: "/app/items/categories", icon: "items", description: "Company item categories." },
   { label: "Sales", path: "/app/sales", icon: "sales", description: "Sales workflows will be introduced in a future module." },
-  { label: "Purchases", path: "/app/purchases", icon: "purchases", description: "Purchase workflows will be introduced in a future module." },
+  { label: "Purchases", path: "/app/purchases", icon: "purchases", description: "Purchase orders, goods receipts, and purchase invoices." },
   { label: "Inventory", path: "/app/inventory", icon: "inventory", description: "Inventory workflows will be introduced in a future module." },
   { label: "Accounting", path: "/app/accounting", icon: "accounting", description: "Accounting workflows will be introduced in a future module." },
   { label: "Reports", path: "/app/reports", icon: "reports", description: "Report workflows will be introduced in a future module." },

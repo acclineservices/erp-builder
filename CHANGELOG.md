@@ -2,6 +2,22 @@
 
 Notable approved repository changes are recorded here. This is not a task backlog.
 
+## 2026-09-17 - P010: Implement purchase management foundation
+
+### Added
+
+- Migration `g010a1b2c3d4` for company-scoped Purchase Orders, PO lines, Goods Receipts/GRN lines, Purchase Invoices/invoice lines, and per-company purchase document sequences.
+- Tenant-safe `/purchases` APIs and `/app/purchases` workspace for PO, GRN, and invoice creation, lifecycle actions, Decimal totals, supplier/item snapshots, company-local `PO-0001`/`GRN-0001`/`PI-0001` numbering, P007 permissions, and audit events.
+
+### Deferred
+
+- P011 inventory posting/stock ledger, P012 Sales, accounting/supplier-ledger posting, full GST, e-invoice/e-way bill, advanced approvals, document templates, and attachment storage.
+
+### Validated
+
+- PostgreSQL healthy; Alembic at `g010a1b2c3d4`; `/health` and `/health/database` passed.
+- Full backend suite: 33 passed, including 2 P010 tests. Frontend TypeScript and production build passed.
+
 ## 2026-09-17 - P009: Implement product and item master management
 
 ### Added

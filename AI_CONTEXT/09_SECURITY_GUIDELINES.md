@@ -7,6 +7,7 @@
 - Do not rely on client-selected company identifiers or frontend hiding as authorization.
 - P008 Party requests must also require the appropriate P007 customer/supplier permission and scope every Party lookup to the authorized company; return `404` for a Party outside that company context.
 - P009 item/category requests require active company context plus P007 item permission; codes, barcodes, categories, and optional warehouse references are validated within that company.
+- P010 purchase requests require the active company context plus P007 purchase permission. Supplier, item, branch, warehouse, PO, GRN, and invoice references are resolved only in that company; lifecycle actions and audit events remain server-side.
 
 ## Identity and authentication
 
@@ -23,6 +24,7 @@
 - P007 administration requires both active company access and the relevant effective company permission; never treat company selection or UI hiding as authorization.
 - Effective company permissions are additive across role assignments. Administrators may not grant permissions they do not hold, and system-managed Owner access may not be mutated through ordinary company administration.
 - Customer/supplier create, edit, view, and lifecycle actions use the current P007 permission catalogue and write audit events; frontend navigation and company switching do not replace these checks.
+- Purchase create/edit/approval/cancellation actions use P007 `purchases.*` permissions; UI visibility is never the authorization boundary.
 - Branch/warehouse defaults are preferences, not authorization scope. Branch-level and warehouse-level authorization remain deferred.
 - Customer administrators may manage other administrators only within the permissions they hold; review this provisional policy after testing.
 

@@ -7,7 +7,7 @@ This is the durable handover for ERP Builder. It records approved project contex
 **Repository:** `C:\Users\mukes\Workspace\ERP-Builder`  
 **Current product name:** ERP Builder  
 **Platform/operator:** Accline Services  
-**Checkpoint:** P009 product and item master management complete and validated on 2026-09-17. P010 has not started.
+**Checkpoint:** P010 purchase management foundation complete and validated on 2026-09-17. P011 has not started.
 
 ## Product purpose and principles
 
@@ -84,6 +84,12 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - Goods may carry inventory setup fields and an optional same-company default warehouse; Services reject inventory fields. Opening stock is stored only as setup foundation, with no stock ledger or movement.
 - `/items` uses active company context, P007 item permissions, company-scoped references/uniqueness, and audit events. `/app/items` and `/app/items/categories` reload on company switch.
 
+### IMPLEMENTED - P010 purchase management foundation
+
+- Company-scoped Purchase Orders, Goods Receipts (GRNs), and Purchase Invoices preserve supplier/item/UOM/description/rate/tax snapshots, Decimal totals, and `PO-0001`, `GRN-0001`, and `PI-0001` company-local numbering.
+- PO drafts can be submitted, approved, or cancelled; GRNs can be cancelled; invoice drafts can be approved or cancelled. All operations use active company context, P007 purchase permissions, same-company supplier/item/warehouse/document validation, and audit events.
+- GRNs retain accepted/rejected Goods receipt facts but create no stock ledger or item balance. Purchase invoices retain commercial/due-date foundations but create no supplier ledger or journal posting. `/app/purchases` is a company-switch-safe responsive workspace.
+
 ### P003 database architecture
 
 | Area | Tables | Approved foundation |
@@ -126,6 +132,10 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - **PLANNED:** WhatsApp and SMS integration; GST and e-way bill support; invoice/document QR-code and barcode capability; and an AI assistant.
 - **DEFERRED:** all associated provider integrations, API/UI workflows, storage, billing, and operational processes.
 - **OPEN:** providers, jurisdictions and compliance scope, integration boundaries, AI capabilities/data access, QR/barcode payload standards, and delivery sequencing.
+
+### P010 boundaries
+
+- **DEFERRED:** P011 inventory posting/stock ledger, P012 sales, accounting posting/supplier ledger, full GST engine and returns, e-invoice/e-way bill, advanced approvals/procurement, PDF templates, and attachment storage.
 
 ## Security and operational requirements
 
@@ -186,6 +196,12 @@ P008 live validation completed on 2026-09-17:
 - The full backend suite passed: 29 tests. The dedicated P008 suite passed: 3 tests. Authentication/P006/P007 regressions passed: 18 tests. Frontend TypeScript and production build passed.
 - Live customer/supplier create, generated codes, contact/address persistence, edit, lifecycle, search/filter, readable validation errors, tenant isolation, and permission enforcement passed. Founder visual review approved Customers and Suppliers in light/dark and mobile layouts.
 - Advanced CRM, multiple-contact UI, advanced multi-address management, GST calculations, e-invoice/e-way bill, sales/purchase transactions, configurable numbering, and P009 remain deferred.
+
+P010 live validation completed on 2026-09-17:
+
+- Docker PostgreSQL was healthy; Alembic reached `g010a1b2c3d4`; `/health` and `/health/database` returned 200.
+- Full backend suite passed: 33 tests, including 2 dedicated P010 purchase workflow/security tests. Frontend TypeScript and production build passed.
+- Validation covers company-local numbering, authoritative Decimal line totals, PO lifecycle, Goods-only GRNs, tenant/foreign-reference and permission rejection, audit events, zero-warehouse operation, and company-resetting UI data loads.
 
 ## Documentation and handover practice
 

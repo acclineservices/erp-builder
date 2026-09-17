@@ -51,7 +51,7 @@ ALL_PERMISSIONS = frozenset(PERMISSION_CATALOGUE)
 STANDARD_ROLE_PERMISSIONS = {
     "Owner": ALL_PERMISSIONS,
     "Admin": ALL_PERMISSIONS,
-    "Accountant": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("accounting.", "reports.", "customers.", "suppliers.", "items."))),
+    "Accountant": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("accounting.", "reports.", "customers.", "suppliers.", "items.", "purchases."))),
     "Sales User": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("sales.", "customers.", "items.view")) and not code.endswith("approve")),
     "Purchase User": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("purchases.", "suppliers.", "items.view")) and not code.endswith("approve")),
     "Inventory User": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("inventory.", "items.")) and not code.endswith("approve")),
