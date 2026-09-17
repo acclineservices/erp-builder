@@ -4,7 +4,7 @@
 
 ERP Builder is the engineering foundation for a long-term, commercial SaaS ERP platform. It provides a minimal web application plus a modular Identity & Organization database foundation so the product can grow through deliberate, secure decisions.
 
-ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable handover, completed P008 scope, deferred work, and open decisions.
+ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable handover, completed P009 scope, deferred work, and open decisions.
 
 ## Repository Structure
 
@@ -119,6 +119,8 @@ P006 makes **Masters / Setup** usable for the selected authorized company. It pr
 P007 makes **Users & Roles** usable for the selected authorized company. It provides company-scoped user invitations through the P004 activation flow, active/inactive company access, multiple role assignments, eight fixed system-managed roles, custom roles and cloning, a 30-permission catalogue, additive effective permissions, protected Owner access, administrator privilege-escalation prevention, default branch/warehouse preferences, secure reset/activation initiation, force logout, and audit events. `/administration` requires active company access and a specific company permission for every action; cross-company access is rejected. The `/app/users` UI includes Users, Roles, Permissions, and Security views and reloads data on company switching. Branch/warehouse authorization scope, full Accline Services platform-administration UI, and future transactional-module permissions remain deferred. Migration: `d07a3e1b4f91`.
 
 P008 makes **Customers** and **Suppliers** usable in the selected authorized company at `/app/customers` and `/app/suppliers`. A shared Party master supports Customer, Supplier, and Both with primary contact/address foundations, company-local `CUS-0001`/`SUP-0001` codes, GST/PAN validation, commercial fields, active/inactive lifecycle, and search/filter. `/parties` requires active `UserCompanyAccess` and the relevant P007 permission, scopes every record by company, returns `404` for cross-company records, and writes audit events. The UI reloads party data when switching companies and formats structured API validation errors safely. Migration: `e008a1b2c3d4`. Advanced CRM, multiple-contact/address UI, GST calculations, e-invoice/e-way bill, configurable numbering, and sales/purchase transactions remain deferred.
+
+P009 adds **Items** and **Item Categories** at `/app/items` and `/app/items/categories`. Goods and Services use company-scoped `ITEM-0001` codes, controlled standard UOMs, HSN/SAC and GST-rate foundations, decimal prices, category, barcode/image fields, lifecycle, and P007 permissions/audit. Goods can store inventory setup fields and an optional same-company default warehouse; no stock ledger or transaction is created. Migration: `f009a1b2c3d4`.
 
 ## Development Workflow
 

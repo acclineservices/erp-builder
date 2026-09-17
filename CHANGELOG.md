@@ -2,6 +2,17 @@
 
 Notable approved repository changes are recorded here. This is not a task backlog.
 
+## 2026-09-17 - P009: Implement product and item master management
+
+### Added
+
+- Migration `f009a1b2c3d4` with company-scoped item categories, items, and item-code sequences.
+- Goods/Service item APIs and UI with controlled UOMs, codes, pricing, tax references, inventory setup foundation, category, barcode/image, lifecycle, search, P007 RBAC, tenant isolation, and audit events.
+
+### Validated
+
+- Alembic head, health endpoints, 31 backend tests including 2 P009 tests, and frontend production build passed.
+
 ## 2026-09-17 - P008: Implement customer and supplier management
 
 ### Added

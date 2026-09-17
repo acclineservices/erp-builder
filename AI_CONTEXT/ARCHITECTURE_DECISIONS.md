@@ -96,6 +96,12 @@
 
 **Consequences:** One business entity can safely serve both roles without duplicate master records, cross-company object IDs return `404`, and browser company selection cannot grant access. Advanced CRM, multiple-contact UI, advanced address management, GST calculations, e-invoice/e-way bill, configurable numbering, and sales/purchase transactions remain deferred.
 
+## AD-013 - Lightweight company-scoped item master
+
+**Decision:** Store Goods and Services in one company-scoped Item model with optional category, controlled UOM code, direct allowed GST-rate foundation, decimal cost/selling prices, optional barcode/image/default warehouse, and per-company `ITEM-0001` sequencing. Opening stock is setup data only; P009 creates no stock ledger or movement.
+
+**Consequences:** Items can support future sales, purchases, inventory, tax, barcode, and pricing work without prematurely implementing those modules. UOM conversion, price lists, GST calculation, scanning/printing, image storage, and configurable numbering remain deferred.
+
 ## Provisional Decisions
 
 The initial Owner assignment workflow, future transactional permission catalogue, subscription association, warehouse-to-branch relationship, branch/warehouse authorization scope, administrative policy, application shell/navigation, theme/language preferences, document-layout customization, and future integration/provider choices are intentionally provisional and must be reviewed after first-version testing.

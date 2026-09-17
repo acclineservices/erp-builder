@@ -2,13 +2,13 @@
 
 ## Task Identifier
 
-P008 - Customer & Supplier Management
+P009 - Product & Item Master Management
 
 ## Status
 
-**COMPLETE** - completed and validated on 2026-09-17. Shared Customer/Supplier/Both Party management, contact/address foundations, generated codes, GST/PAN validation, commercial fields, lifecycle/search, P007 permission enforcement, tenant isolation, audit events, readable API errors, frontend Customers/Suppliers UI, live API checks, and frontend production build passed.
+**COMPLETE** - completed and validated on 2026-09-17. Company-scoped Goods/Service item masters, categories, controlled UOMs, pricing/tax/inventory foundations, RBAC/audit, tenant isolation, UI, migration, backend tests, and frontend build passed.
 
-No successor implementation task is active. P009 has not started.
+No successor implementation task is active. P010 has not started.
 
 ## Scope
 

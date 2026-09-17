@@ -6,6 +6,7 @@
 - Verify the authenticated user has active `UserCompanyAccess` for the selected company before reading or writing its data.
 - Do not rely on client-selected company identifiers or frontend hiding as authorization.
 - P008 Party requests must also require the appropriate P007 customer/supplier permission and scope every Party lookup to the authorized company; return `404` for a Party outside that company context.
+- P009 item/category requests require active company context plus P007 item permission; codes, barcodes, categories, and optional warehouse references are validated within that company.
 
 ## Identity and authentication
 

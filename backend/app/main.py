@@ -9,6 +9,7 @@ from app.api.routes.health import router as health_router
 from app.api.routes.organization import router as organization_router
 from app.api.routes.administration import router as administration_router
 from app.api.routes.parties import router as parties_router
+from app.api.routes.items import router as items_router
 from app.core.config import settings
 
 
@@ -34,6 +35,7 @@ def create_app() -> FastAPI:
     application.include_router(organization_router)
     application.include_router(administration_router)
     application.include_router(parties_router)
+    application.include_router(items_router)
 
     return application
 

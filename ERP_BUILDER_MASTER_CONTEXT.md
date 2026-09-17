@@ -7,7 +7,7 @@ This is the durable handover for ERP Builder. It records approved project contex
 **Repository:** `C:\Users\mukes\Workspace\ERP-Builder`  
 **Current product name:** ERP Builder  
 **Platform/operator:** Accline Services  
-**Checkpoint:** P008 customer and supplier management complete and validated on 2026-09-17. P009 has not started.
+**Checkpoint:** P009 product and item master management complete and validated on 2026-09-17. P010 has not started.
 
 ## Product purpose and principles
 
@@ -77,6 +77,12 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - Customer and supplier codes are generated independently per company (`CUS-0001` and `SUP-0001` style). GSTIN is required for registered/composition parties; GSTIN, PAN, and company-local code/GSTIN uniqueness are validated server-side.
 - `/parties` requires authenticated active-company context and P007 customer/supplier permissions. Every lookup is company-scoped, including a cross-company object-ID `404`; create, update, and lifecycle actions write company audit events.
 - Protected `/app/customers` and `/app/suppliers` provide customer/supplier management, company-switching reload, search/filter, edit, and lifecycle controls. A reusable frontend API-error formatter turns FastAPI validation detail arrays into safe, readable messages.
+
+### IMPLEMENTED - P009 product and item master management
+
+- Shared company-scoped Items support Goods and Services with categories, controlled UOMs, company-local `ITEM-0001` codes, HSN/SAC, allowed GST-rate references, decimal pricing, barcode/image foundations, lifecycle, and search/filter.
+- Goods may carry inventory setup fields and an optional same-company default warehouse; Services reject inventory fields. Opening stock is stored only as setup foundation, with no stock ledger or movement.
+- `/items` uses active company context, P007 item permissions, company-scoped references/uniqueness, and audit events. `/app/items` and `/app/items/categories` reload on company switch.
 
 ### P003 database architecture
 

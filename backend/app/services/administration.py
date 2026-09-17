@@ -39,6 +39,7 @@ PERMISSION_CATALOGUE = {
     "permissions.view": "View the extensible permission catalogue.",
     "customers.view": "View company customers.", "customers.create": "Create company customers.", "customers.edit": "Edit company customers.", "customers.deactivate": "Activate or deactivate company customers.",
     "suppliers.view": "View company suppliers.", "suppliers.create": "Create company suppliers.", "suppliers.edit": "Edit company suppliers.", "suppliers.deactivate": "Activate or deactivate company suppliers.",
+    "items.view": "View company item masters.", "items.create": "Create company items and categories.", "items.edit": "Edit company items and categories.", "items.deactivate": "Activate or deactivate company items and categories.",
     "sales.view": "View future sales records.", "sales.create": "Create future sales records.", "sales.edit": "Edit future sales records.", "sales.cancel": "Cancel future sales records.", "sales.export": "Export future sales records.", "sales.approve": "Approve future sales records.",
     "purchases.view": "View future purchase records.", "purchases.create": "Create future purchase records.", "purchases.edit": "Edit future purchase records.", "purchases.cancel": "Cancel future purchase records.", "purchases.export": "Export future purchase records.", "purchases.approve": "Approve future purchase records.",
     "inventory.view": "View future inventory records.", "inventory.create": "Create future inventory records.", "inventory.edit": "Edit future inventory records.", "inventory.approve": "Approve future inventory adjustments.",
@@ -50,11 +51,11 @@ ALL_PERMISSIONS = frozenset(PERMISSION_CATALOGUE)
 STANDARD_ROLE_PERMISSIONS = {
     "Owner": ALL_PERMISSIONS,
     "Admin": ALL_PERMISSIONS,
-    "Accountant": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("accounting.", "reports.", "customers.", "suppliers."))),
-    "Sales User": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("sales.", "customers.")) and not code.endswith("approve")),
-    "Purchase User": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("purchases.", "suppliers.")) and not code.endswith("approve")),
-    "Inventory User": frozenset(code for code in ALL_PERMISSIONS if code.startswith("inventory.") and not code.endswith("approve")),
-    "Store Manager": frozenset(code for code in ALL_PERMISSIONS if code.startswith("inventory.")),
+    "Accountant": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("accounting.", "reports.", "customers.", "suppliers.", "items."))),
+    "Sales User": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("sales.", "customers.", "items.view")) and not code.endswith("approve")),
+    "Purchase User": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("purchases.", "suppliers.", "items.view")) and not code.endswith("approve")),
+    "Inventory User": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("inventory.", "items.")) and not code.endswith("approve")),
+    "Store Manager": frozenset(code for code in ALL_PERMISSIONS if code.startswith(("inventory.", "items."))),
     "Viewer": frozenset(code for code in ALL_PERMISSIONS if code.endswith(".view")),
 }
 

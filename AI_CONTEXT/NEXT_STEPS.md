@@ -2,7 +2,7 @@
 
 ## Immediate Next Steps
 
-No successor P-stage is authorized. P008 is **COMPLETE**; P009 has not started.
+No successor P-stage is authorized. P009 is **COMPLETE**; P010 has not started.
 
 When a future task is authorized, resolve or sequence these **OPEN** decisions first:
 
@@ -11,7 +11,7 @@ When a future task is authorized, resolve or sequence these **OPEN** decisions f
 3. Advanced CRM, multiple-contact UI, advanced multiple-address management, GST calculations, e-invoice/e-way bill, configurable numbering, and sales/purchase transaction scope.
 4. Full Accline Services platform-administration UI and policy workflow, separate from company administration.
 5. Production notification-provider selection and operational controls for email/SMS/WhatsApp; P004 intentionally uses a development-only provider abstraction.
-6. P009 functionality is not authorized or started; authorize and sequence it explicitly before implementation.
+6. Stock movements/ledger, UOM conversions, price lists, GST calculations, barcode scanning/printing, advanced image storage, and P010 are not authorized or started.
 
 ## Dependencies
 
