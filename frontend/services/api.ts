@@ -49,5 +49,6 @@ export function apiErrorMessage(payload: unknown, fallback: string): string {
 }
 
 export function caughtErrorMessage(error: unknown, fallback: string): string {
-  return error instanceof Error && error.message.trim() ? error.message : fallback;
+  if (!(error instanceof Error) || !error.message.trim()) return fallback;
+  return /failed to fetch|networkerror|load failed/i.test(error.message) ? fallback : error.message;
 }

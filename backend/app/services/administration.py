@@ -68,8 +68,15 @@ class AdministrationForbidden(PermissionError):
     pass
 
 
-def ensure_company_catalogue(database: Session, company: Company) -> None:
-    """Idempotently seed global permission codes and a company's fixed roles."""
+def ensure_company_catalogue(database: Session, company: Company) -> bool:
+    """Idempotently seed global permission codes and fixed roles.
+
+    Permission checks run concurrently for a workspace's initial requests. Lock
+    the company row while a catalogue upgrade is needed and do not rewrite an
+    unchanged role-permission collection on ordinary reads.
+    """
+    database.scalar(select(Company).where(Company.id == company.id).with_for_update())
+    changed = False
     existing_permissions = {item.code: item for item in database.scalars(select(Permission)).all()}
     for code, description in PERMISSION_CATALOGUE.items():
         permission = existing_permissions.get(code)
@@ -77,8 +84,10 @@ def ensure_company_catalogue(database: Session, company: Company) -> None:
             permission = Permission(code=code, description=description)
             database.add(permission)
             existing_permissions[code] = permission
+            changed = True
         elif permission.description != description:
             permission.description = description
+            changed = True
     database.flush()
     permissions = {item.code: item for item in database.scalars(select(Permission)).all()}
     existing_roles = {
@@ -90,10 +99,21 @@ def ensure_company_catalogue(database: Session, company: Company) -> None:
         if role is None:
             role = Role(name=name, scope="company", company_id=company.id, is_system_managed=True)
             database.add(role)
-        role.description = f"System-managed {name} role."
-        role.is_system_managed = True
-        role.permissions = [permissions[code] for code in sorted(codes)]
-    database.flush()
+            changed = True
+        description = f"System-managed {name} role."
+        if role.description != description:
+            role.description = description
+            changed = True
+        if not role.is_system_managed:
+            role.is_system_managed = True
+            changed = True
+        current_codes = {permission.code for permission in role.permissions}
+        if current_codes != set(codes):
+            role.permissions = [permissions[code] for code in sorted(codes)]
+            changed = True
+    if changed:
+        database.flush()
+    return changed
 
 
 def effective_permission_codes(database: Session, user_id: UUID, company_id: UUID) -> set[str]:
@@ -111,7 +131,10 @@ def effective_permission_codes(database: Session, user_id: UUID, company_id: UUI
 
 
 def require_permission(database: Session, actor: User, company: Company, permission: str) -> set[str]:
-    ensure_company_catalogue(database, company)
+    # Persist a one-time catalogue upgrade before serving concurrent workspace
+    # requests; otherwise request-session close would roll it back and retry it.
+    if ensure_company_catalogue(database, company):
+        database.commit()
     codes = effective_permission_codes(database, actor.id, company.id)
     if permission not in codes:
         raise AdministrationForbidden("You do not have permission for this company administration action.")
