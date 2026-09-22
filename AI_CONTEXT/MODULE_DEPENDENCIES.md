@@ -20,10 +20,10 @@
 ## Dependency Constraints
 
 - Sales, purchase, inventory, finance, accounting, documents, reports, and AI modules are not implemented and must not be introduced without explicit company scoping.
-- The Accline Services administration area must use the P004 platform-session boundary and future platform-level access checks, independent of frontend visibility.
+- The Pruvian Technologies administration area must use the P004 platform-session boundary and future platform-level access checks, independent of frontend visibility.
 - P005 company selection is a client presentation preference only; P006 demonstrates that every customer API must independently validate active UserCompanyAccess and scope all record queries to the selected company.
 - P007 administration adds required company permissions after the active-company check; it does not make branch/warehouse defaults into authorization boundaries.
 - P008 applies the same active-company and permission boundary to customer/supplier masters. Customer/supplier codes and GSTIN uniqueness are company-local; cross-company Party IDs must not reveal records.
 - P010 applies the same boundary to PO, GRN, and invoice APIs; guessed cross-company documents do not resolve, and foreign supplier/item/warehouse or linked-document identifiers are rejected server-side.
 - Subscription/billing capabilities may later relate to `Company`; P003 intentionally creates no billing schema or pricing policy.
-- Product naming and branding are not tenant or architecture boundaries; ERP Builder is the current name and may change later.
+- Product naming and branding are not tenant or architecture boundaries; Pruvian is the finalized customer-facing name and Pruvian ERP remains the internal project name.

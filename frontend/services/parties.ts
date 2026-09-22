@@ -1,7 +1,7 @@
 import type { AccessibleCompany } from "./auth";
 import { apiErrorMessage } from "./api";
+import { apiBaseUrl } from "../config/api";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 export type PartyType = "customer" | "supplier" | "both";
 export type GstStatus = "registered" | "unregistered" | "composition" | "exempt";
 export type Party = {

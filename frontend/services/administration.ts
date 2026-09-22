@@ -1,4 +1,4 @@
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+import { apiBaseUrl } from "../config/api";
 
 export type Permission = { code: string; description: string | null };
 export type Role = { id: string; name: string; description: string | null; is_active: boolean; is_system_managed: boolean; permission_codes: string[] };

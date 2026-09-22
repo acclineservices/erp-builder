@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Capture founder-level guidance, operating assumptions, and stewardship expectations for ERP Builder.
+Capture founder-level guidance, operating assumptions, and stewardship expectations for Pruvian ERP.
 
 ## Placeholder Sections
 

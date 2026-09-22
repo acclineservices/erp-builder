@@ -3,9 +3,9 @@ requires = ["setuptools>=75"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "erp-builder-backend"
+name = "pruvian-erp-backend"
 version = "0.1.0"
-description = "ERP Builder backend application foundation."
+description = "Pruvian backend application foundation."
 requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.14,<2.0",

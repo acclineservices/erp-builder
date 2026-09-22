@@ -4,7 +4,7 @@ interface HealthResponse {
   status: "ok";
 }
 
-const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000").replace(/\/$/, "");
+import { apiBaseUrl } from "../config/api";
 
 export async function checkBackendHealth(signal?: AbortSignal): Promise<HealthResponse> {
   const response = await fetch(`${apiBaseUrl}/health`, { signal });

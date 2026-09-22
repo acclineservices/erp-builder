@@ -1,6 +1,9 @@
 export const applicationBrand = {
-  productName: "ERP Builder",
-  shortName: "EB",
+  companyName: "Pruvian Technologies",
+  productName: "Pruvian",
+  shortName: "P",
+  tagline: "Run Better. Grow Smarter.",
+  description: "Cloud Accounting & Business Management Platform",
   supportLabel: "Help & support",
   assistantLabel: "Assistant",
 };

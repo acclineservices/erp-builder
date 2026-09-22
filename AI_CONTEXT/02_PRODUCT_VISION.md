@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Describe the intended long-term direction and value proposition of ERP Builder.
+Describe the intended long-term direction and value proposition of Pruvian.
 
 ## Placeholder Sections
 

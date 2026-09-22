@@ -1,1 +1,1 @@
-"""ERP Builder backend application package."""
+"""Pruvian backend application package."""

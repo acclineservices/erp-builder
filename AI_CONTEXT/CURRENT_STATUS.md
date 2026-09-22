@@ -2,7 +2,7 @@
 
 ## Repository Status
 
-P010 is **COMPLETE**. The durable handover is [`ERP_BUILDER_MASTER_CONTEXT.md`](../ERP_BUILDER_MASTER_CONTEXT.md). P011 has not started.
+P010 is **COMPLETE**. P010.1 has prepared the repository for online staging deployment, but Render services have not been connected and founder testing has not occurred. The durable handover is [`ERP_BUILDER_MASTER_CONTEXT.md`](../ERP_BUILDER_MASTER_CONTEXT.md). P011 has not started.
 
 ## Current Application Foundation
 
@@ -18,6 +18,7 @@ P010 is **COMPLETE**. The durable handover is [`ERP_BUILDER_MASTER_CONTEXT.md`](
 - **IMPLEMENTED:** P010 tenant-scoped Purchase Orders, Goods Receipts, and Purchase Invoices with supplier/item snapshots, Decimal totals, local PO/GRN/PI numbering, controlled lifecycle, P007 permission checks, audit events, and the responsive `/app/purchases` workspace.
 - **IMPLEMENTED:** P010 linked multi-line workflow: editable PO/GRN/invoice drafts, source-prefilled document creation, partial/multiple GRNs, over-receipt prevention, PO receipt-status synchronization, and invoice PO/GRN-line traceability.
 - **IMPLEMENTED:** P010 searchable company-scoped supplier/item entry, blank manual item lines, manual invoice additions alongside linked lines, and direct browser-print purchase vouchers.
+- **PREPARED:** P010.1 Render staging configuration: normalized secret `DATABASE_URL` support, explicit environment-driven CORS, HTTPS-capable session-cookie settings, environment-driven Vite API URL, finalized Pruvian branding, and [manual Render configuration](../docs/STAGING_DEPLOYMENT.md). Online staging deployment is still pending.
 - **DEFERRED:** Inventory posting/stock ledger (P011), sales (P012), accounting posting/supplier ledger, full GST, e-invoice/e-way bill, advanced procurement/approvals/PDF templates/attachments, UOM conversions, price lists, configurable numbering, and advanced product imaging.
 - **PLANNED:** mobile-browser support, language and theme preferences, branding and document-layout customization, WhatsApp/SMS, GST/e-way bill, QR/barcode, and AI-assistant capabilities. Their detailed designs remain open.
 
@@ -30,6 +31,7 @@ P010 is **COMPLETE**. The durable handover is [`ERP_BUILDER_MASTER_CONTEXT.md`](
 - P009 Alembic `f009a1b2c3d4`, 31 backend tests, 2 P009 tests, frontend build, and health endpoints passed.
 - P010 Alembic `g010a1b2c3d4`, 33 backend tests including 2 P010 tests, live health endpoints, frontend TypeScript, and production build passed.
 - P010 enhancement migration `h010a1b2c3d4`, 34 backend tests including 3 P010 workflow tests, frontend TypeScript/production build, and health endpoints passed.
+- P010.1 staging preparation validation: Alembic head remains `h010a1b2c3d4`; complete backend suite passed (39 tests), and frontend TypeScript/production build passed. Online staging deployment and founder testing remain pending.
 
 ## Risks and Blockers
 

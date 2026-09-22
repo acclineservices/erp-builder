@@ -2,9 +2,22 @@
 
 from functools import cached_property
 
-from pydantic import Field
+from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from sqlalchemy import URL
+from sqlalchemy import URL, make_url
+
+
+def normalize_database_url(database_url: str) -> str:
+    """Make a PostgreSQL URL use the installed psycopg 3 SQLAlchemy driver.
+
+    Render provides standard ``postgresql://`` URLs.  SQLAlchemy otherwise
+    interprets that scheme as the psycopg2 driver, which this project does not
+    install.  Explicit driver names remain untouched for local compatibility.
+    """
+    parsed_url = make_url(database_url)
+    if parsed_url.drivername in {"postgres", "postgresql"}:
+        parsed_url = parsed_url.set(drivername="postgresql+psycopg")
+    return parsed_url.render_as_string(hide_password=False)
 
 
 class Settings(BaseSettings):
@@ -16,7 +29,7 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
-    app_name: str = "ERP Builder API"
+    app_name: str = "Pruvian API"
     app_env: str = "development"
     app_host: str = "0.0.0.0"
     app_port: int = Field(default=8000, ge=1, le=65535)
@@ -37,8 +50,37 @@ class Settings(BaseSettings):
     auth_failed_login_limit: int = Field(default=5, ge=1, le=20)
     auth_lock_minutes: int = Field(default=15, ge=1, le=1440)
     auth_cookie_secure: bool = False
+    auth_cookie_samesite: str = "lax"
+    auth_cookie_domain: str | None = None
     auth_cookie_name: str = "erp_builder_session"
     auth_platform_cookie_name: str = "erp_builder_platform_session"
+
+    @field_validator("backend_cors_origins")
+    @classmethod
+    def cors_origins_must_be_explicit(cls, value: str) -> str:
+        """Prevent insecure wildcard origins with credentialed browser requests."""
+        if "*" in {origin.strip() for origin in value.split(",")}:
+            raise ValueError("BACKEND_CORS_ORIGINS cannot include '*' when credentials are enabled.")
+        return value
+
+    @field_validator("auth_cookie_samesite")
+    @classmethod
+    def validate_cookie_samesite(cls, value: str) -> str:
+        normalized = value.lower()
+        if normalized not in {"lax", "strict", "none"}:
+            raise ValueError("AUTH_COOKIE_SAMESITE must be lax, strict, or none.")
+        return normalized
+
+    @field_validator("auth_cookie_domain", mode="before")
+    @classmethod
+    def empty_cookie_domain_is_host_only(cls, value: str | None) -> str | None:
+        return value.strip() or None if isinstance(value, str) else value
+
+    @model_validator(mode="after")
+    def cross_site_cookies_require_https(self) -> "Settings":
+        if self.auth_cookie_samesite == "none" and not self.auth_cookie_secure:
+            raise ValueError("AUTH_COOKIE_SECURE must be true when AUTH_COOKIE_SAMESITE=none.")
+        return self
 
     @cached_property
     def cors_origins(self) -> list[str]:
@@ -49,7 +91,7 @@ class Settings(BaseSettings):
     def sqlalchemy_database_url(self) -> str:
         """Return the explicit database URL or build one from PostgreSQL settings."""
         if self.database_url:
-            return self.database_url
+            return normalize_database_url(self.database_url)
 
         return URL.create(
             drivername="postgresql+psycopg",

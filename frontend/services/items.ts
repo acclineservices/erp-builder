@@ -1,6 +1,6 @@
 import type { AccessibleCompany } from "./auth";
 import { apiErrorMessage } from "./api";
-const base = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+import { apiBaseUrl as base } from "../config/api";
 export type Category={id:string;name:string;code:string|null;description:string|null;is_active:boolean};
 export type Item={id:string;name:string;display_name:string|null;code:string;item_type:"goods"|"service";category_id:string|null;category_name:string|null;uom_code:string;hsn_sac_code:string|null;barcode:string|null;purchase_price:number|null;selling_price:number|null;gst_rate:number|null;track_inventory:boolean;opening_stock:number;reorder_level:number|null;default_warehouse_id:string|null;image_url:string|null;notes:string|null;is_active:boolean;description:string|null};
 export type ItemInput=Omit<Item,"id"|"code"|"category_name"|"is_active">&{code?:string|null};

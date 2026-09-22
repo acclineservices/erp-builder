@@ -1,4 +1,4 @@
-"""Alembic migration environment for ERP Builder."""
+"""Alembic migration environment for Pruvian."""
 
 from logging.config import fileConfig
 

@@ -2,6 +2,13 @@
 
 Notable approved repository changes are recorded here. This is not a task backlog.
 
+## 2026-09-22 - P010.1: Prepare Pruvian for staging deployment
+
+- Finalized customer-facing Pruvian Technologies / Pruvian branding, tagline, and platform description while preserving Pruvian ERP internal naming.
+- Prepared Render-safe PostgreSQL URL handling, explicit credentialed CORS, HTTPS session-cookie configuration, centralized Vite API base URL handling, and documented backend/static-site deployment configuration including Alembic startup and SPA rewrites.
+- Validated Alembic head `h010a1b2c3d4`, 39 backend tests, and frontend TypeScript/production build.
+- This checkpoint does not create Render services or mark online staging deployment complete. P011 has not started.
+
 ## 2026-09-17 - P010: Improve purchase entry and voucher printing
 
 - Added reusable searchable selectors, blank manual item lines, manual invoice items beside linked lines, PO-linked GRN line control, and direct browser-print PO/GRN/Invoice vouchers with A4 print CSS.

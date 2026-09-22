@@ -4,7 +4,7 @@ Define durable repository-level rules that guide product and engineering work.
 
 # Scope
 
-Applies to all contributors, automation, and future implementation tasks within ERP Builder.
+Applies to all contributors, automation, and future implementation tasks within Pruvian ERP.
 
 # Structure
 

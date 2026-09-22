@@ -1,10 +1,10 @@
-# ERP Builder
+# Pruvian ERP
 
 ## Project Vision
 
-ERP Builder is the engineering foundation for a long-term, commercial SaaS ERP platform. It provides a minimal web application plus a modular Identity & Organization database foundation so the product can grow through deliberate, secure decisions.
+Pruvian is the Cloud Accounting & Business Management Platform from Pruvian Technologies. **Run Better. Grow Smarter.** This repository is the internal Pruvian ERP engineering foundation for the application and its modular Identity & Organization database foundation.
 
-ERP Builder is the current product name; future naming or branding changes must not become architectural or tenant-boundary assumptions. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable handover, completed P010 scope, deferred work, and open decisions.
+Customer-facing product naming is Pruvian; `Pruvian ERP` and `pruvian-erp-*` are appropriate internal project and infrastructure names. See [ERP_BUILDER_MASTER_CONTEXT.md](ERP_BUILDER_MASTER_CONTEXT.md) for the durable handover, completed P010 scope, deferred work, and open decisions.
 
 ## Repository Structure
 
@@ -80,6 +80,10 @@ The frontend is available at `http://localhost:5173`.
 
 The authentication page is at http://localhost:5173/auth. After sign-in, the protected application shell opens at http://localhost:5173/app/dashboard.
 
+## Render staging preparation
+
+P010.1 prepares the repository for staging but does **not** mark an online staging deployment complete. See [docs/STAGING_DEPLOYMENT.md](docs/STAGING_DEPLOYMENT.md) for the exact Render backend/static-site values, safe environment variables, migration strategy, CORS/cookie configuration, and SPA rewrite required before founder testing.
+
 ### Docker Compose
 
 To run the complete development stack (PostgreSQL, backend, and frontend):
@@ -114,9 +118,9 @@ P004 adds email/password and mobile-OTP authentication, activation and email/mob
 
 P005 adds a protected, responsive ERP shell with a collapsible desktop sidebar, mobile drawer, header, breadcrumbs, dashboard foundation, company switcher, profile/logout controls, and global-search, quick-action, notification, help, theme, and language foundations. Navigation routes are placeholders only: no business workflows or fabricated transactional data are included. Product name, navigation configuration, and presentation tokens are centralized for future change. The included language preference supports English, Hindi, and Marathi as a translation foundation; English remains the current UI content.
 
-P006 makes **Masters / Setup** usable for the selected authorized company. It provides company profile/setup fields (including optional GST, contact, address, and logo URL foundation), optional branches, and optional warehouses. No default head-office branch or warehouse is generated. Every organization API requires the authenticated user's active `UserCompanyAccess` for the selected company and scopes reads/updates accordingly; a warehouse can reference only a branch in that same company. Company status and subscription control remain with Accline Services.
+P006 makes **Masters / Setup** usable for the selected authorized company. It provides company profile/setup fields (including optional GST, contact, address, and logo URL foundation), optional branches, and optional warehouses. No default head-office branch or warehouse is generated. Every organization API requires the authenticated user's active `UserCompanyAccess` for the selected company and scopes reads/updates accordingly; a warehouse can reference only a branch in that same company. Company status and subscription control remain with Pruvian Technologies.
 
-P007 makes **Users & Roles** usable for the selected authorized company. It provides company-scoped user invitations through the P004 activation flow, active/inactive company access, multiple role assignments, eight fixed system-managed roles, custom roles and cloning, a 30-permission catalogue, additive effective permissions, protected Owner access, administrator privilege-escalation prevention, default branch/warehouse preferences, secure reset/activation initiation, force logout, and audit events. `/administration` requires active company access and a specific company permission for every action; cross-company access is rejected. The `/app/users` UI includes Users, Roles, Permissions, and Security views and reloads data on company switching. Branch/warehouse authorization scope, full Accline Services platform-administration UI, and future transactional-module permissions remain deferred. Migration: `d07a3e1b4f91`.
+P007 makes **Users & Roles** usable for the selected authorized company. It provides company-scoped user invitations through the P004 activation flow, active/inactive company access, multiple role assignments, eight fixed system-managed roles, custom roles and cloning, a 30-permission catalogue, additive effective permissions, protected Owner access, administrator privilege-escalation prevention, default branch/warehouse preferences, secure reset/activation initiation, force logout, and audit events. `/administration` requires active company access and a specific company permission for every action; cross-company access is rejected. The `/app/users` UI includes Users, Roles, Permissions, and Security views and reloads data on company switching. Branch/warehouse authorization scope, full Pruvian Technologies platform-administration UI, and future transactional-module permissions remain deferred. Migration: `d07a3e1b4f91`.
 
 P008 makes **Customers** and **Suppliers** usable in the selected authorized company at `/app/customers` and `/app/suppliers`. A shared Party master supports Customer, Supplier, and Both with primary contact/address foundations, company-local `CUS-0001`/`SUP-0001` codes, GST/PAN validation, commercial fields, active/inactive lifecycle, and search/filter. `/parties` requires active `UserCompanyAccess` and the relevant P007 permission, scopes every record by company, returns `404` for cross-company records, and writes audit events. The UI reloads party data when switching companies and formats structured API validation errors safely. Migration: `e008a1b2c3d4`. Advanced CRM, multiple-contact/address UI, GST calculations, e-invoice/e-way bill, configurable numbering, and sales/purchase transactions remain deferred.
 

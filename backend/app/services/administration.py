@@ -201,7 +201,7 @@ def selectable_roles(database: Session, company_id: UUID, role_ids: list[UUID], 
     if len(roles) != len(set(role_ids)):
         raise AdministrationError("One or more selected roles are not available in this company.")
     if any(role.name == "Owner" and role.is_system_managed for role in roles):
-        raise AdministrationForbidden("Primary Owner assignments are controlled by Accline Services.")
+        raise AdministrationForbidden("Primary Owner assignments are controlled by Pruvian Technologies.")
     allowed = actor_codes
     for role in roles:
         role_codes = {permission.code for permission in role.permissions}
@@ -228,7 +228,7 @@ def invite_user(database: Session, company: Company, actor: User, actor_codes: s
         development_notifications.deliver("activation", user.email, activation_token)
         action = "user_invited"
     elif user.account_state == "inactive" or not user.is_active:
-        raise AdministrationError("This identity is inactive and must be managed by Accline Services.")
+        raise AdministrationError("This identity is inactive and must be managed by Pruvian Technologies.")
     else:
         if user.account_state == "invited":
             auth_service.request_activation(database, user.email or "")
@@ -251,7 +251,7 @@ def update_user(database: Session, company: Company, actor: User, actor_codes: s
     if not access.is_active:
         raise AdministrationError("Activate this company user before initiating credentials.")
     if any(role.name == "Owner" and role.is_system_managed for role in assignments_for_user(database, company.id, user_id)):
-        raise AdministrationForbidden("Primary Owner access is controlled by Accline Services.")
+        raise AdministrationForbidden("Primary Owner access is controlled by Pruvian Technologies.")
     roles = selectable_roles(database, company.id, payload.role_ids, actor_codes)
     validate_defaults(database, company.id, payload.default_branch_id, payload.default_warehouse_id)
     access.user.name = payload.name.strip()
@@ -270,7 +270,7 @@ def set_user_access_status(database: Session, company: Company, actor: User, use
     if access is None:
         raise AdministrationError("The requested user is not available in this company.")
     if any(role.name == "Owner" and role.is_system_managed for role in assignments_for_user(database, company.id, user_id)):
-        raise AdministrationForbidden("Primary Owner access is controlled by Accline Services.")
+        raise AdministrationForbidden("Primary Owner access is controlled by Pruvian Technologies.")
     access.is_active = is_active
     if not is_active:
         revoke_user_sessions(database, access.user_id)
@@ -303,7 +303,7 @@ def force_logout(database: Session, company: Company, actor: User, user_id: UUID
     if access is None:
         raise AdministrationError("The requested user is not available in this company.")
     if any(role.name == "Owner" and role.is_system_managed for role in assignments_for_user(database, company.id, user_id)):
-        raise AdministrationForbidden("Primary Owner access is controlled by Accline Services.")
+        raise AdministrationForbidden("Primary Owner access is controlled by Pruvian Technologies.")
     revoke_user_sessions(database, user_id)
     audit(database, company.id, actor, "force_logout", access.user)
 

@@ -1,22 +1,24 @@
-# ERP Builder Master Context
+# Pruvian ERP Master Context
 
 ## Purpose and use
 
-This is the durable handover for ERP Builder. It records approved project context, completed milestones, deliberately deferred work, and open decisions. Read it with the relevant `AI_CONTEXT/` files before starting a new P-stage. Update it after every major P-stage as part of the documentation and backup practice.
+This is the durable handover for the internal Pruvian ERP project. It records approved project context, completed milestones, deliberately deferred work, and open decisions. Read it with the relevant `AI_CONTEXT/` files before starting a new P-stage. Update it after every major P-stage as part of the documentation and backup practice.
 
 **Repository:** `C:\Users\mukes\Workspace\ERP-Builder`  
-**Current product name:** ERP Builder  
-**Platform/operator:** Accline Services  
-**Checkpoint:** P010 purchase management foundation complete and validated on 2026-09-17. P011 has not started.
+**Company:** Pruvian Technologies
+**Customer-facing product:** Pruvian — *Run Better. Grow Smarter.*
+**Description:** Cloud Accounting & Business Management Platform
+**Internal project name:** Pruvian ERP
+**Checkpoint:** P010 purchase management foundation complete; P010.1 staging deployment preparation completed. Online staging is not yet deployed or founder-tested. P011 has not started.
 
 ## Product purpose and principles
 
-ERP Builder is the foundation for a long-term commercial SaaS ERP platform intended to make everyday business operations clearer and more manageable. Accline Services operates the platform. A `Company` represents the customer business and the fundamental tenant/data-isolation boundary.
+Pruvian is the Cloud Accounting & Business Management Platform from Pruvian Technologies, intended to make everyday business operations clearer and more manageable. A `Company` represents the customer business and the fundamental tenant/data-isolation boundary.
 
 - Start simple; avoid unnecessary complexity, speculative abstractions, dependencies, and premature business assumptions.
 - Keep decisions testable and proportionate. Decisions may change after testing; record material changes rather than treating provisional choices as permanent.
 - Keep product/business modules modular and company-scoped.
-- ERP Builder is the current product/application name. It may change later; do not make the display name a durable architectural identifier or tenant boundary.
+- Pruvian is the customer-facing product name. Keep display naming configurable; it is not a durable architectural identifier or tenant boundary. `Pruvian ERP` remains the internal development/project name.
 
 ## Current delivery state
 
@@ -56,7 +58,7 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 
 ### IMPLEMENTED - P006 company, branch, and warehouse management
 
-- Company profile/setup is available only in the selected authenticated company context, with legal/display names, extensible business type, optional GST/contact/address information, company status display, logo URL foundation, and a lightweight profile-completion indicator. Accline Services retains company status and subscription control; billing is not implemented.
+- Company profile/setup is available only in the selected authenticated company context, with legal/display names, extensible business type, optional GST/contact/address information, company status display, logo URL foundation, and a lightweight profile-completion indicator. Pruvian Technologies retains company status and subscription control; billing is not implemented.
 - Branches remain optional: no synthetic head-office branch is created. Authorized company-context users can list, create, edit, and activate/deactivate company-scoped branches.
 - Warehouses remain optional: no synthetic warehouse is created. Warehouses can be listed, created, edited, and activated/deactivated, and may have an optional branch from the same company only.
 - P006 migration `c83a91d4e6f2` adds only optional organization profile/location fields and the optional warehouse `branch_id` relation.
@@ -92,6 +94,14 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - P010 enhancement adds editable draft documents, multi-line entry, PO-to-GRN and PO/GRN-to-invoice prefills, source-line references, partial/multiple Goods receipts, remaining-quantity checks, and linked-document actions. Migration `h010a1b2c3d4` adds invoice source-line traceability only.
 - P010 entry enhancement adds reusable searchable supplier/item controls, explicitly blank manual lines, linked-plus-manual invoice lines, and browser-print voucher views. Advanced template/PDF generation remains deferred.
 
+### PREPARED - P010.1 online staging deployment
+
+- Finalized the Pruvian/Pruvian Technologies customer-facing brand configuration without changing internal project/infrastructure naming.
+- `DATABASE_URL` accepts Render-standard PostgreSQL URLs and normalizes them to the installed psycopg 3 SQLAlchemy driver; local `POSTGRES_*` development configuration remains supported.
+- CORS uses explicit environment-driven origins, and session cookies support secure, SameSite, and optional domain configuration for HTTPS staging without weakening local defaults.
+- Added the exact backend migration/start command, frontend build configuration, and required SPA rewrite in [`docs/STAGING_DEPLOYMENT.md`](docs/STAGING_DEPLOYMENT.md). Render services have not been created or connected by this checkpoint; online founder testing remains required.
+- Validation retained Alembic head `h010a1b2c3d4`; the complete backend suite passed (39 tests), and frontend TypeScript/production build passed.
+
 ### P003 database architecture
 
 | Area | Tables | Approved foundation |
@@ -109,8 +119,8 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - **IMPLEMENTED:** `email_password` and `mobile_otp` methods map to one `User`; the P004 flows enforce active, verified methods and account state before authentication.
 - **IMPLEMENTED:** bcrypt password and OTP hashing, short-lived/single-use activation, verification, reset tokens and OTPs, server-side session invalidation, and generic credential/recovery responses.
 - **IMPLEMENTED:** P007 company-scoped user provisioning/management UI and APIs, invitation/activation integration, role administration, safe security actions, and audit events.
-- **DEFERRED:** Accline Services platform-administration UI and paid/production notification-provider integration.
-- **OPEN:** the initial company Owner assignment workflow. A company creator does not automatically receive Owner rights; Accline Services controls the primary Owner assignment.
+- **DEFERRED:** Pruvian Technologies platform-administration UI and paid/production notification-provider integration.
+- **OPEN:** the initial company Owner assignment workflow. A company creator does not automatically receive Owner rights; Pruvian Technologies controls the primary Owner assignment.
 
 ### Tenancy, branches, warehouses, and RBAC
 
@@ -120,7 +130,7 @@ ERP Builder is the foundation for a long-term commercial SaaS ERP platform inten
 - **IMPLEMENTED:** P006 organization APIs independently validate an authenticated session and active `UserCompanyAccess` for the requested `X-Company-ID`; records cannot be read or changed across the selected company boundary. Warehouse-to-branch association is validated in the service layer for the same company.
 - **IMPLEMENTED:** P007 seeds fixed company roles and the current permission catalogue, requires active company access plus required permission for `/administration`, and prevents Owner mutation and administrator privilege escalation.
 - **IMPLEMENTED:** P008 `/parties` requires the same active-company boundary plus P007 customer/supplier permission checks, scopes every Party query to the authorized company, and records party administration audit events.
-- **DEFERRED:** branch-level and warehouse-level authorization scope, full Accline Services platform administration UI, and transactional-module permission enforcement until those modules exist.
+- **DEFERRED:** branch-level and warehouse-level authorization scope, full Pruvian Technologies platform administration UI, and transactional-module permission enforcement until those modules exist.
 - **OPEN:** initial primary Owner assignment workflow, catalogue expansion as ERP modules are introduced, customer-administrator policy after first-version testing, and subscription association/pricing policy.
 
 ### Application shell, experience, and customization

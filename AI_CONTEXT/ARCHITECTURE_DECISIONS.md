@@ -2,7 +2,7 @@
 
 ## AD-001 — PostgreSQL through Docker for development
 
-**Context:** ERP Builder needs a relational, multi-tenant-ready datastore without requiring developers to install PostgreSQL directly on Windows.
+**Context:** Pruvian ERP needs a relational, multi-tenant-ready datastore without requiring developers to install PostgreSQL directly on Windows.
 
 **Decision:** Use PostgreSQL 16 in the existing Docker Compose environment. Configure it solely with environment variables.
 
@@ -18,7 +18,7 @@
 
 ## AD-003 — Company is the business-data isolation boundary
 
-**Context:** ERP Builder is a multi-tenant SaaS product in which customer business data must not cross company boundaries.
+**Context:** Pruvian is a multi-tenant SaaS product in which customer business data must not cross company boundaries.
 
 **Decision:** A `Company` is a first-class entity. `UserCompanyAccess` explicitly grants a user active access to a company, and future business APIs must resolve an active company context before operating on company data.
 
@@ -34,7 +34,7 @@
 
 ## AD-005 — Roles can be platform-scoped or company-scoped
 
-**Context:** Accline Services needs backend-enforceable separation from normal customer administration, while company access needs future RBAC flexibility.
+**Context:** Pruvian Technologies needs backend-enforceable separation from normal customer administration, while company access needs future RBAC flexibility.
 
 **Decision:** Store role scope (`platform` or `company`), permissions, role-permission grants, and user role assignments. `User.is_platform_admin` is an explicit platform-administration marker; it is not a frontend-only convention.
 
@@ -50,11 +50,11 @@
 
 ## AD-007 - Product name is not a durable architectural identifier
 
-**Context:** ERP Builder is the current product/application name, but the name may change as the product evolves.
+**Context:** Pruvian is the finalized customer-facing product name; the internal project name remains Pruvian ERP.
 
-**Decision:** Treat the current name as product and presentation context, not as a tenant boundary, durable integration identifier, or irreversible architectural assumption.
+**Decision:** Treat product and presentation naming as configurable context, not as a tenant boundary, durable integration identifier, or irreversible architectural assumption.
 
-**Consequences:** Future branding and naming changes remain possible without redefining company isolation or platform architecture. The detailed branding/customization model is open.
+**Consequences:** Branding changes do not redefine company isolation or platform architecture. The detailed branding/customization model remains open.
 
 ## AD-008 - Revocable opaque sessions and provider-agnostic authentication delivery
 
@@ -76,7 +76,7 @@
 
 **Context:** P006 introduces the first mutable customer administration APIs. Browser company selection alone cannot authorize company, branch, or warehouse operations.
 
-**Decision:** Require an authenticated P004 session and an active `UserCompanyAccess` grant for the request `X-Company-ID` before `/organization` operations. Scope every branch and warehouse lookup by that authorized company. Allow only an optional warehouse branch that belongs to the same company. Keep company status/subscription control with Accline Services and provide profile/status display only to ordinary company-context APIs.
+**Decision:** Require an authenticated P004 session and an active `UserCompanyAccess` grant for the request `X-Company-ID` before `/organization` operations. Scope every branch and warehouse lookup by that authorized company. Allow only an optional warehouse branch that belongs to the same company. Keep company status/subscription control with Pruvian Technologies and provide profile/status display only to ordinary company-context APIs.
 
 **Consequences:** Object-ID manipulation cannot reveal or change another selected tenant's organization records. P007 can add role-policy checks in the organization service layer without replacing the tenant boundary. Company branding is represented only by an optional logo URL foundation; storage and upload architecture remain deferred.
 

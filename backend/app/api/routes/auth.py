@@ -46,13 +46,14 @@ def set_session_cookie(
 ) -> None:
     cookie_name = settings.auth_platform_cookie_name if platform else settings.auth_cookie_name
     seconds = max(1, int((expires_at - auth_service.now()).total_seconds()))
-    cookie_options: dict[str, str | int | bool] = {
+    cookie_options: dict[str, str | int | bool | None] = {
         "key": cookie_name,
         "value": token,
         "httponly": True,
         "secure": settings.auth_cookie_secure,
-        "samesite": "lax",
+        "samesite": settings.auth_cookie_samesite,
         "path": "/",
+        "domain": settings.auth_cookie_domain,
     }
     if remember_me:
         cookie_options["max_age"] = seconds
@@ -180,7 +181,7 @@ def logout(
 ) -> MessageResponse:
     auth_service.revoke_session(database, session_token)
     database.commit()
-    response.delete_cookie(settings.auth_cookie_name, path="/")
+    response.delete_cookie(settings.auth_cookie_name, path="/", domain=settings.auth_cookie_domain)
     return MessageResponse(message="Signed out.")
 
 
@@ -232,7 +233,7 @@ def platform_logout(
 ) -> MessageResponse:
     auth_service.revoke_session(database, platform_token)
     database.commit()
-    response.delete_cookie(settings.auth_platform_cookie_name, path="/")
+    response.delete_cookie(settings.auth_platform_cookie_name, path="/", domain=settings.auth_cookie_domain)
     return MessageResponse(message="Signed out.")
 
 

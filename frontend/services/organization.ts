@@ -1,6 +1,6 @@
 import type { AccessibleCompany } from "./auth";
+import { apiBaseUrl } from "../config/api";
 
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 
 export type AddressFields = {
   address_line1: string | null;

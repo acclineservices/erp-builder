@@ -15,11 +15,11 @@ from app.core.config import settings
 
 
 def create_app() -> FastAPI:
-    """Create and configure the ERP Builder API application."""
+    """Create and configure the Pruvian API application."""
     application = FastAPI(
         title=settings.app_name,
         version="0.1.0",
-        description="ERP Builder backend API.",
+        description="Pruvian — Cloud Accounting & Business Management Platform.",
     )
 
     application.add_middleware(

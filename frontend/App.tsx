@@ -49,7 +49,7 @@ export function App() {
     }
   }
 
-  if (loading) return <main className="app-loading"><span className="loading-mark">EB</span><p>Preparing your workspace...</p></main>;
+  if (loading) return <main className="app-loading"><span className="loading-mark">{applicationBrand.shortName}</span><p>Preparing your workspace...</p></main>;
   if (!user) return <AuthPage onAuthenticated={(authenticatedUser) => { setUser(authenticatedUser); navigate("/app/dashboard", true); }} />;
   return <AppShell user={user} path={path.startsWith("/app") ? path : "/app/dashboard"} navigate={navigate} onLogout={logout} />;
 }
