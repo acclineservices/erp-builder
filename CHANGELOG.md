@@ -2,6 +2,11 @@
 
 Notable approved repository changes are recorded here. This is not a task backlog.
 
+## 2026-09-22 - P010.1: Finalize online staging deployment
+
+- Recorded the completed, founder-tested Pruvian online staging deployment with custom HTTPS application/API domains, CORS, secure sessions, direct SPA refresh, private-network PostgreSQL connectivity, and independent laptop/mobile-data validation.
+- Recorded the separate staging/local database boundary, accepted staging cold-start behavior, production-readiness work, and the required future UI/UX refinement phase. No application functionality changed; P011 has not started.
+
 ## 2026-09-22 - P010.1: Add secure staging bootstrap
 
 - Added an idempotent, staging-only CLI for creating the first verified company Owner from Render environment variables, using the existing P003/P004/P007 data and role-catalogue foundations.

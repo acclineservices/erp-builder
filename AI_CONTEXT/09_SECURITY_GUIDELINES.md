@@ -35,6 +35,10 @@
 - Enforce foreign keys, uniqueness, checks, and indexes at the database level where supported.
 - Treat GSTIN, PAN, business contact details, and commercial master data as company business data. Validate structured API errors into safe user-facing messages; never expose stack traces or persistence internals.
 - Keep secrets in environment configuration; do not commit `.env` files or production credentials.
+- Staging database connection strings remain Render secrets. Staging database access is private to Render services; do not enable public database access merely for development convenience.
+- The live staging application and API use HTTPS, secure cookies, explicit CORS origins, and separate cloud PostgreSQL data. Local Docker development remains a separate environment.
+- Remove one-time bootstrap secrets after successful provisioning; do not record bootstrap identities, passwords, mobile numbers, hashes, or tokens in repository documentation.
+- Before production, review backups/retention, monitoring, production infrastructure separation, and deployment/session/CORS security.
 - Apply schema changes exclusively through reviewed Alembic migrations.
 - Use separate development, test, and production databases. Automated tests must never target production data.
 - Use server-side revocation for logout and password reset; treat platform-admin sessions as a separate cookie and route boundary.

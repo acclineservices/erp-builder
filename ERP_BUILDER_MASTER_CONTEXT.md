@@ -9,7 +9,7 @@ This is the durable handover for the internal Pruvian ERP project. It records ap
 **Customer-facing product:** Pruvian — *Run Better. Grow Smarter.*
 **Description:** Cloud Accounting & Business Management Platform
 **Internal project name:** Pruvian ERP
-**Checkpoint:** P010 purchase management foundation complete; P010.1 staging backend/frontend are online. P010.1-B provides the pending safe first-company/Owner bootstrap command. P011 has not started.
+**Checkpoint:** P010 purchase management foundation complete; P010.1 online staging deployment is complete and founder-tested. P011 has not started.
 
 ## Product purpose and principles
 
@@ -94,13 +94,17 @@ Pruvian is the Cloud Accounting & Business Management Platform from Pruvian Tech
 - P010 enhancement adds editable draft documents, multi-line entry, PO-to-GRN and PO/GRN-to-invoice prefills, source-line references, partial/multiple Goods receipts, remaining-quantity checks, and linked-document actions. Migration `h010a1b2c3d4` adds invoice source-line traceability only.
 - P010 entry enhancement adds reusable searchable supplier/item controls, explicitly blank manual lines, linked-plus-manual invoice lines, and browser-print voucher views. Advanced template/PDF generation remains deferred.
 
-### PREPARED - P010.1 online staging deployment
+### COMPLETE - P010.1 online staging deployment
 
 - Finalized the Pruvian/Pruvian Technologies customer-facing brand configuration without changing internal project/infrastructure naming.
 - `DATABASE_URL` accepts Render-standard PostgreSQL URLs and normalizes them to the installed psycopg 3 SQLAlchemy driver; local `POSTGRES_*` development configuration remains supported.
 - CORS uses explicit environment-driven origins, and session cookies support secure, SameSite, and optional domain configuration for HTTPS staging without weakening local defaults.
-- Added the exact backend migration/start command, frontend build configuration, and required SPA rewrite in [`docs/STAGING_DEPLOYMENT.md`](docs/STAGING_DEPLOYMENT.md). Backend and frontend are online; first-company/Owner provisioning and founder testing remain manual operational steps.
-- Validation retained Alembic head `h010a1b2c3d4`; the complete backend suite passed (39 tests), and frontend TypeScript/production build passed.
+- Live staging is available at the approved custom application and API domains in Singapore. The separate Render PostgreSQL 16 staging database uses private-network backend connectivity; local Docker PostgreSQL development remains supported.
+- Founder validation confirmed HTTPS, login/logout, authenticated dashboard, secure session cookies, CORS, direct SPA refresh, laptop use, phone/mobile-data use, and operation independent of the founder's local PC.
+- The temporary staging bootstrap completed and its environment variables were removed. No credentials, connection strings, hashes, or tokens are recorded in this repository.
+- Render Free Web Service sleep/cold-start behavior is accepted for staging. Production readiness remains separate work: backups/retention, monitoring, production infrastructure separation, and production deployment/security review.
+- The current functional UI is not design-approved. A separately authorized future UI/UX refinement phase must address visual identity, typography, spacing/layout, navigation, dashboards, forms, lists/tables, responsive/mobile behavior, component consistency, light/dark themes, and visual polish.
+- Validation retained Alembic head `h010a1b2c3d4`; complete backend coverage passed (42 tests) before live deployment.
 
 ### P003 database architecture
 
@@ -137,6 +141,7 @@ Pruvian is the Cloud Accounting & Business Management Platform from Pruvian Tech
 
 - **IMPLEMENTED:** responsive P005 authenticated application shell and dashboard foundation with desktop/mobile navigation, theme preferences, language-switcher foundation, centralized product branding configuration, and protected frontend routes.
 - **PLANNED:** complete Hindi/Marathi translations, persistent user/default-company preferences, dashboard customization, company branding, and document/invoice layout customization.
+- **PLANNED:** a dedicated UI/UX refinement phase for Pruvian brand palette, typography, alignment, spacing, hierarchy, navigation chrome, dashboards, forms, tables/lists, responsive/mobile UX, component consistency, light/dark themes, and visual polish. The current functional UI is not design-approved.
 - **OPEN:** detailed application information architecture after first-version review, supported-language translation scope, branding/customization scope, and document/invoice template model.
 
 ### Future capabilities and integrations
@@ -156,6 +161,8 @@ Pruvian is the Cloud Accounting & Business Management Platform from Pruvian Tech
 - Apply schema changes only through reviewed Alembic migrations.
 - Enforce UUID identities, database constraints, tenant isolation, and server-side authorization; never rely on the frontend for access control.
 - Do not expose credential hashes or authentication internals in API response schemas.
+- Keep staging database access private to Render services; separate cloud staging data from local development data.
+- Before production use, define backups/retention, monitoring, infrastructure separation, and a production deployment/security review.
 
 ## Validation and checkpoint
 

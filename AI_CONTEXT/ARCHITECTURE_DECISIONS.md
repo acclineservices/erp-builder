@@ -114,6 +114,14 @@
 
 **Consequences:** The workflow supports partial receipts and future three-way matching without an inventory ledger. P011 is the only stage authorized to post accepted quantities to stock.
 
+## AD-016 - Separate live staging environment and domain architecture
+
+**Context:** P010.1 requires an independently reachable staging environment without coupling it to a founder workstation or local Docker data.
+
+**Decision:** Use `staging.pruviantechnologies.com` for the staging Pruvian application and `api-staging.pruviantechnologies.com` for the staging API. Keep `pruviantechnologies.com` for the future marketing/company website and reserve `app.pruviantechnologies.com` / `api.pruviantechnologies.com` for production. Run staging in Singapore on separate Render PostgreSQL 16 infrastructure using private-network backend database connectivity; retain local Docker PostgreSQL for development.
+
+**Consequences:** Staging is independently testable over HTTPS with explicit CORS/session settings, while production remains a separately reviewed environment. Render Free Web Service sleep/cold-start behavior is accepted for current staging only. Backups/retention, monitoring, production infrastructure separation, and production deployment/security review remain required before production.
+
 ## Provisional Decisions
 
 The initial Owner assignment workflow, future transactional permission catalogue, subscription association, warehouse-to-branch relationship, branch/warehouse authorization scope, administrative policy, application shell/navigation, theme/language preferences, document-layout customization, and future integration/provider choices are intentionally provisional and must be reviewed after first-version testing.

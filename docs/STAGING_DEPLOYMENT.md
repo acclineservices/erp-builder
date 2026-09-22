@@ -1,6 +1,6 @@
-# Pruvian staging deployment preparation
+# Pruvian online staging deployment
 
-P010.1 prepared the Pruvian application for online Render staging. The staging backend and frontend are now online; P010.1-B adds the safe one-time database bootstrap procedure below. P011 has not started.
+**Status: COMPLETE.** P010.1 staging is live and founder-tested. P011 has not started.
 
 ## Brand and domains
 
@@ -13,6 +13,28 @@ P010.1 prepared the Pruvian application for online Render staging. The staging b
 - Future production application/API: `app.pruviantechnologies.com` and `api.pruviantechnologies.com`
 
 `Pruvian ERP` and `pruvian-erp-*` remain appropriate internal development and infrastructure names.
+
+## Live staging
+
+| Component | Live address or resource |
+| --- | --- |
+| Staging application | `https://staging.pruviantechnologies.com` |
+| Staging API | `https://api-staging.pruviantechnologies.com` |
+| API health | `https://api-staging.pruviantechnologies.com/health` |
+| Database health | `https://api-staging.pruviantechnologies.com/health/database` |
+| Render frontend | `pruvian-staging` |
+| Render backend | `pruvian-erp-staging-api` |
+| Render PostgreSQL | `pruvian-erp-staging-db` (PostgreSQL 16, Singapore) |
+
+## Domain architecture
+
+| Domain | Purpose |
+| --- | --- |
+| `pruviantechnologies.com` | Future marketing and company website |
+| `staging.pruviantechnologies.com` | Live staging Pruvian application |
+| `api-staging.pruviantechnologies.com` | Live staging API |
+| `app.pruviantechnologies.com` | Future production application |
+| `api.pruviantechnologies.com` | Future production API |
 
 ## Backend Render Web Service
 
@@ -63,34 +85,49 @@ Add a Render Static Site **Rewrite** rule, not a redirect:
 
 This lets Vite's browser-history application handle direct visits and refreshes for `/auth`, `/app/dashboard`, `/app/customers`, `/app/suppliers`, `/app/items`, and `/app/purchases`. Static assets still take precedence on Render.
 
-## Go-live checklist
+## Confirmed founder validation
 
-1. Create the backend Web Service with the settings above and connect its private database URL as `DATABASE_URL`.
-2. After the first backend deployment passes `/health` and `/health/database`, create the frontend Static Site with the generated backend URL in `VITE_API_BASE_URL`.
-3. Add the generated frontend URL and `https://staging.pruviantechnologies.com` to `BACKEND_CORS_ORIGINS`, then redeploy the backend.
-4. Add the frontend rewrite rule and verify direct-route refreshes.
-5. Connect `staging.pruviantechnologies.com` to the Static Site. After its HTTPS certificate is active, rebuild the frontend with its intended API URL and confirm login, logout, cookies, CORS, `/health`, and `/health/database` online.
-6. Do not treat staging as complete until the founder has tested the connected deployment online.
+The founder confirmed custom frontend/backend domains, HTTPS, login/logout cycles, authenticated dashboard access, session cookies, CORS, direct SPA-route refreshes, laptop use, phone/mobile-data use, and operation independent of the founder's local PC.
 
-## One-time staging bootstrap
+## One-time staging bootstrap — completed
 
-After the backend and fresh staging PostgreSQL database are connected, add these **secret** environment variables to the backend Web Service. Do not place their values in this repository or frontend build configuration:
+The initial company and Owner provisioning was completed through the guarded bootstrap command. The temporary bootstrap environment variables have been removed from Render. Do not add them back or place their values in this repository or frontend build configuration.
 
 - `STAGING_BOOTSTRAP_EMAIL`
 - `STAGING_BOOTSTRAP_MOBILE`
 - `STAGING_BOOTSTRAP_PASSWORD`
 - `STAGING_BOOTSTRAP_COMPANY_NAME`
 
-The command refuses to run unless `APP_ENV=staging`. Temporarily replace the backend Render Start Command with:
+If a future, explicitly authorized staging reset requires the command, it refuses to run unless `APP_ENV=staging`. Its temporary Start Command is:
 
 ```sh
 alembic upgrade head && python -m app.scripts.bootstrap_staging
 ```
 
-Deploy once and confirm only the safe created/existing status messages in the logs. The process exits after provisioning; immediately restore the normal Start Command and redeploy:
+The process exits after provisioning; restore the normal Start Command and redeploy:
 
 ```sh
 alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ```
 
-The command is idempotent: it reuses the matching user/company, restores active and verified state, calls the existing P007 catalogue seeding, and adds the Owner assignment only when absent. It creates no HTTP endpoint, emits no password/hash/token values, and does not grant platform-admin access. Remove the four bootstrap secrets from Render after a confirmed successful run.
+The command is idempotent: it reuses the matching user/company, restores active and verified state, calls the existing P007 catalogue seeding, and adds the Owner assignment only when absent. It creates no HTTP endpoint, emits no password/hash/token values, and does not grant platform-admin access.
+
+## Current security and operations
+
+- The staging API runs with `APP_ENV=staging`, `AUTH_COOKIE_SECURE=true`, `AUTH_COOKIE_SAMESITE=lax`, and `BACKEND_CORS_ORIGINS=https://staging.pruviantechnologies.com`.
+- The cloud staging PostgreSQL database is separate from local Docker PostgreSQL development. Local Docker development remains supported.
+- The backend uses Render private-network database connectivity. Public/external staging database access is restricted.
+- Database connection strings remain Render secrets and are never documented or committed.
+- Render Free Web Services may sleep after inactivity and have a cold-start delay. This is acceptable for the current staging environment.
+
+## Future production-readiness work
+
+- Define backup and retention policies.
+- Add monitoring and operational alerting.
+- Establish production infrastructure separation from staging.
+- Complete a production deployment and security review.
+- Run a dedicated UI/UX refinement phase before design approval.
+
+## Future UI/UX refinement phase
+
+The current UI is functional but not design-approved. A dedicated, separately authorized UI/UX phase must cover the Pruvian brand palette, typography, alignment, spacing, hierarchy, sidebar/header, dashboard, forms, tables/lists, responsive/mobile behavior, component consistency, light/dark themes, and overall visual polish. This checkpoint makes no visual redesign.

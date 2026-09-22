@@ -80,9 +80,9 @@ The frontend is available at `http://localhost:5173`.
 
 The authentication page is at http://localhost:5173/auth. After sign-in, the protected application shell opens at http://localhost:5173/app/dashboard.
 
-## Render staging preparation
+## Online staging
 
-P010.1 prepared the repository for staging; the backend and frontend are now online. See [docs/STAGING_DEPLOYMENT.md](docs/STAGING_DEPLOYMENT.md) for the exact Render configuration, safe one-time bootstrap procedure, and remaining founder testing steps.
+P010.1 online staging deployment is complete and founder-tested. The staging application is available at `https://staging.pruviantechnologies.com`; its API is `https://api-staging.pruviantechnologies.com`. See [docs/STAGING_DEPLOYMENT.md](docs/STAGING_DEPLOYMENT.md) for the domain architecture, security/operations posture, and production-readiness follow-ups. P011 has not started.
 
 ### Docker Compose
 

@@ -2,27 +2,27 @@
 
 ## Task Identifier
 
-P010.1-B - Safe one-time staging bootstrap
+P010.1-C - Finalize online staging deployment checkpoint
 
 ## Status
 
-**COMPLETE (repository checkpoint)** - P010 purchase-management scope remains complete. Staging backend and frontend are online; P010.1-B adds the validated guarded first-company/Owner bootstrap command. Its one-time Render execution remains manual.
+**COMPLETE** - P010.1 online staging deployment is live and founder-tested. This documentation checkpoint records the completed deployment and deferred UI/UX refinement phase.
 
 No successor product implementation task is active. P011 has not started.
 
 ## Scope
 
-Prepare a staging-only, environment-driven initial company/Owner bootstrap command without inventory posting, sales, accounting posting, or a full GST engine.
+Record the completed online staging deployment, security posture, domain architecture, production-readiness follow-ups, and future UI/UX refinement without changing application functionality.
 
 ## Constraints
 
 - Preserve active UserCompanyAccess as the tenant boundary and enforce P007 purchase permissions server-side.
-- Do not create a public bootstrap endpoint, emit credentials, or make the bootstrap user a platform admin.
+- Do not modify application functionality, add secrets, or start P011.
 - Keep stock ledger (P011), Sales (P012), accounting/supplier ledger, full GST, e-invoice/e-way bill, advanced approvals/PDFs/attachments deferred.
 - Do not start P011.
 
 ## Definition of Done
 
-- The command runs only with `APP_ENV=staging`, reads bootstrap inputs only from environment variables, and reuses P003/P004/P007 models and role catalogue seeding.
-- It is idempotent and creates/reuses an active verified user, active company/access, and standard Owner assignment without a public endpoint.
+- P010.1 is recorded as complete only after confirmed custom domains, HTTPS, authentication, cookies, CORS, SPA routing, and independent laptop/mobile operation.
+- Record the future UI/UX refinement phase without redesigning the current functional UI.
 - P011 remains unstarted.

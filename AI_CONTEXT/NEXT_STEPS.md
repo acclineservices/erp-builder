@@ -2,7 +2,7 @@
 
 ## Immediate Next Steps
 
-No successor product P-stage is authorized. P010 is **COMPLETE**; P010.1 backend/frontend are online and P010.1-B provides the pending one-time bootstrap command. P011 has not started.
+No successor product P-stage is authorized. P010 and P010.1 are **COMPLETE**; online staging is founder-tested. P011 has not started.
 
 When a future task is authorized, resolve or sequence these **OPEN** decisions first:
 
@@ -12,7 +12,8 @@ When a future task is authorized, resolve or sequence these **OPEN** decisions f
 4. Full Pruvian Technologies platform-administration UI and policy workflow, separate from company administration.
 5. Production notification-provider selection and operational controls for email/SMS/WhatsApp; P004 intentionally uses a development-only provider abstraction.
 6. P011 stock movements/ledger, P012 sales, accounting/supplier ledger, full GST, advanced procurement/approvals/PDF/attachments, UOM conversions, price lists, barcode scanning/printing, and advanced image storage are not authorized or started.
-7. Run the one-time bootstrap procedure in [`docs/STAGING_DEPLOYMENT.md`](../docs/STAGING_DEPLOYMENT.md), remove its Render secrets afterward, then founder-test the connected staging application before declaring staging accepted.
+7. Plan a dedicated UI/UX refinement phase before design approval: Pruvian palette, typography, alignment, spacing, hierarchy, navigation, dashboard, forms, tables/lists, responsive/mobile UX, component consistency, light/dark themes, and visual polish.
+8. Before production, define backups/retention, monitoring/alerting, production infrastructure separation, and a production deployment/security review.
 
 ## Dependencies
 
