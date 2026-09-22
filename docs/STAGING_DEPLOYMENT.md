@@ -1,6 +1,6 @@
 # Pruvian staging deployment preparation
 
-P010.1 prepares the Pruvian application for an online Render staging deployment. It does **not** create Render services and does not mark staging deployment complete. P011 has not started.
+P010.1 prepared the Pruvian application for online Render staging. The staging backend and frontend are now online; P010.1-B adds the safe one-time database bootstrap procedure below. P011 has not started.
 
 ## Brand and domains
 
@@ -71,3 +71,26 @@ This lets Vite's browser-history application handle direct visits and refreshes 
 4. Add the frontend rewrite rule and verify direct-route refreshes.
 5. Connect `staging.pruviantechnologies.com` to the Static Site. After its HTTPS certificate is active, rebuild the frontend with its intended API URL and confirm login, logout, cookies, CORS, `/health`, and `/health/database` online.
 6. Do not treat staging as complete until the founder has tested the connected deployment online.
+
+## One-time staging bootstrap
+
+After the backend and fresh staging PostgreSQL database are connected, add these **secret** environment variables to the backend Web Service. Do not place their values in this repository or frontend build configuration:
+
+- `STAGING_BOOTSTRAP_EMAIL`
+- `STAGING_BOOTSTRAP_MOBILE`
+- `STAGING_BOOTSTRAP_PASSWORD`
+- `STAGING_BOOTSTRAP_COMPANY_NAME`
+
+The command refuses to run unless `APP_ENV=staging`. Temporarily replace the backend Render Start Command with:
+
+```sh
+alembic upgrade head && python -m app.scripts.bootstrap_staging
+```
+
+Deploy once and confirm only the safe created/existing status messages in the logs. The process exits after provisioning; immediately restore the normal Start Command and redeploy:
+
+```sh
+alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+The command is idempotent: it reuses the matching user/company, restores active and verified state, calls the existing P007 catalogue seeding, and adds the Owner assignment only when absent. It creates no HTTP endpoint, emits no password/hash/token values, and does not grant platform-admin access. Remove the four bootstrap secrets from Render after a confirmed successful run.

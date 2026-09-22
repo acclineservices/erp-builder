@@ -82,7 +82,7 @@ The authentication page is at http://localhost:5173/auth. After sign-in, the pro
 
 ## Render staging preparation
 
-P010.1 prepares the repository for staging but does **not** mark an online staging deployment complete. See [docs/STAGING_DEPLOYMENT.md](docs/STAGING_DEPLOYMENT.md) for the exact Render backend/static-site values, safe environment variables, migration strategy, CORS/cookie configuration, and SPA rewrite required before founder testing.
+P010.1 prepared the repository for staging; the backend and frontend are now online. See [docs/STAGING_DEPLOYMENT.md](docs/STAGING_DEPLOYMENT.md) for the exact Render configuration, safe one-time bootstrap procedure, and remaining founder testing steps.
 
 ### Docker Compose
 

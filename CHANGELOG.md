@@ -2,6 +2,12 @@
 
 Notable approved repository changes are recorded here. This is not a task backlog.
 
+## 2026-09-22 - P010.1: Add secure staging bootstrap
+
+- Added an idempotent, staging-only CLI for creating the first verified company Owner from Render environment variables, using the existing P003/P004/P007 data and role-catalogue foundations.
+- The command has no HTTP route, never prints credential material, and leaves platform-administration access disabled.
+- Validated by 42 backend tests; the one-time Render invocation remains an operator-controlled action.
+
 ## 2026-09-22 - P010.1: Prepare Pruvian for staging deployment
 
 - Finalized customer-facing Pruvian Technologies / Pruvian branding, tagline, and platform description while preserving Pruvian ERP internal naming.

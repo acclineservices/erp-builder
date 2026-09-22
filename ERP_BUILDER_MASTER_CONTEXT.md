@@ -9,7 +9,7 @@ This is the durable handover for the internal Pruvian ERP project. It records ap
 **Customer-facing product:** Pruvian — *Run Better. Grow Smarter.*
 **Description:** Cloud Accounting & Business Management Platform
 **Internal project name:** Pruvian ERP
-**Checkpoint:** P010 purchase management foundation complete; P010.1 staging deployment preparation completed. Online staging is not yet deployed or founder-tested. P011 has not started.
+**Checkpoint:** P010 purchase management foundation complete; P010.1 staging backend/frontend are online. P010.1-B provides the pending safe first-company/Owner bootstrap command. P011 has not started.
 
 ## Product purpose and principles
 
@@ -99,7 +99,7 @@ Pruvian is the Cloud Accounting & Business Management Platform from Pruvian Tech
 - Finalized the Pruvian/Pruvian Technologies customer-facing brand configuration without changing internal project/infrastructure naming.
 - `DATABASE_URL` accepts Render-standard PostgreSQL URLs and normalizes them to the installed psycopg 3 SQLAlchemy driver; local `POSTGRES_*` development configuration remains supported.
 - CORS uses explicit environment-driven origins, and session cookies support secure, SameSite, and optional domain configuration for HTTPS staging without weakening local defaults.
-- Added the exact backend migration/start command, frontend build configuration, and required SPA rewrite in [`docs/STAGING_DEPLOYMENT.md`](docs/STAGING_DEPLOYMENT.md). Render services have not been created or connected by this checkpoint; online founder testing remains required.
+- Added the exact backend migration/start command, frontend build configuration, and required SPA rewrite in [`docs/STAGING_DEPLOYMENT.md`](docs/STAGING_DEPLOYMENT.md). Backend and frontend are online; first-company/Owner provisioning and founder testing remain manual operational steps.
 - Validation retained Alembic head `h010a1b2c3d4`; the complete backend suite passed (39 tests), and frontend TypeScript/production build passed.
 
 ### P003 database architecture
